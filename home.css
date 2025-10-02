@@ -44,7 +44,7 @@ body::before {
     height: 600px;
     background: var(--primary-color);
     top: -100px;
-    left: -120px;
+    left: -150px;
 }
 
 body::after {
