@@ -44,7 +44,7 @@ body::before {
     height: 600px;
     background: var(--primary-color);
     top: -100px;
-    left: -150px;
+    left: -120px;
 }
 
 body::after {
@@ -98,7 +98,7 @@ footer {
     display: inline-block;
     background-color: var(--primary-color);
     color: white;
-    padding: 20px 30px;
+    padding: 12px 30px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
