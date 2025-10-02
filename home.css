@@ -173,4 +173,15 @@ nav ul li a:hover {
     color: var(--primary-color);
 }
 
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+}
+
 
