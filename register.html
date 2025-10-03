@@ -57,7 +57,9 @@
                 document.getElementById('error-message').textContent = 'Passwords do not match';
             }
             
-
+            if (password.length < 6) {
+                document.getElementById('error-message').textContent = 'Password must be at least 6 characters';
+            }
     </script>
 </body>
 </html>
