@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Smart Digital Menu</title>
+    <link rel="stylesheet" href="menu.css">
+    
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        
+        <div id="error-message" class="error-message"></div>
+        
+        <form action="register.php" method="POST" id="register-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+        
+        <div class="login-link">
+            Already have an account? <a href="Loggin.html">Login here</a>
+        </div>
+    </div>
+
+
+</body>
+</html>
