@@ -49,6 +49,14 @@
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             
+            if (!name || !email || !password || !confirmPassword) {
+                document.getElementById('error-message').textContent = 'Please fill in all fields';
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('error-message').textContent = 'Passwords do not match';
+            }
+            
 
     </script>
 </body>
