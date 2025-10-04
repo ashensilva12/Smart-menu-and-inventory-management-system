@@ -14,4 +14,7 @@
     $lencheck1=strlen($Name)>=3;
 
 
+    if(!$cri1 || !$cri2 || !$cri3 || !$lencheck1)exit();
 
+
+?>
