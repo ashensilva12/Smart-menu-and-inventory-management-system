@@ -28,5 +28,5 @@
     if($ok)echo "<script>alert('Data entered');window.location.href = 'Loggin.html';</script>";
     else echo "Something went wrong please check again";
     
-    
+    $con->close();
 ?>
