@@ -18,5 +18,9 @@
 
     $con =new mysqli('localhost:6368','root','1234','resturent');
 
+    $data="select * from customer where email='$Email'";
+    $result=$con->query($data);
+    if($result->num_rows >0)exit("<script>alert('Email already exit');window.location.href = 'register.html';</script>");
+
 
 ?>
