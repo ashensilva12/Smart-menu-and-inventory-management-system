@@ -22,5 +22,7 @@
     $result=$con->query($data);
     if($result->num_rows >0)exit("<script>alert('Email already exit');window.location.href = 'register.html';</script>");
 
+    $sql="insert into customer values('$Name','$Email','$Password')";
+    $ok =$con->query($sql); 
 
 ?>
