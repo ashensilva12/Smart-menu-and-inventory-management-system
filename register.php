@@ -7,5 +7,9 @@
     $Email=trim($Email);
     $Password=trim($Password);
 
+    $cri1=$Name!="";
+    $cri2=$Email!="";
+    $cri3=$Password!="";
 
+   
 ?>
