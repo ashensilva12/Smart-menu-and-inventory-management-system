@@ -25,4 +25,8 @@
     $sql="insert into customer values('$Name','$Email','$Password')";
     $ok =$con->query($sql); 
 
+    if($ok)echo "<script>alert('Data entered');window.location.href = 'Loggin.html';</script>";
+    else echo "Something went wrong please check again";
+    
+    
 ?>
