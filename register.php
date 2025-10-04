@@ -11,5 +11,7 @@
     $cri2=$Email!="";
     $cri3=$Password!="";
 
-   
-?>
+    $lencheck1=strlen($Name)>=3;
+
+
+
