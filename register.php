@@ -3,5 +3,9 @@
     $Email=$_POST['email']??'';
     $Password=$_POST['password']??'';
 
-   
+    $Name=trim($Name);
+    $Email=trim($Email);
+    $Password=trim($Password);
+
+
 ?>
