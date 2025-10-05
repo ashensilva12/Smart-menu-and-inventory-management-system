@@ -30,5 +30,8 @@
 
     // Check if it's admin login first
     $stmt = $con->prepare("SELECT adminusername, adminpassword FROM admin WHERE adminusername = ?");
+    $stmt->bind_param("s", $Email);
+    $stmt->execute();
+    $adminResult = $stmt->get_result();
 }
 ?>
