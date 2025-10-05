@@ -73,5 +73,23 @@ if ($customerResult->num_rows === 1) {
         $_SESSION['customer_email'] = $row['email'];
         header("Location: home.html");
         exit();
+        } else {
+        echo "
+        <html><head>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        </head><body>
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Incorrect customer password.',
+            confirmButtonText: 'Retry'
+        }).then(() => {
+            window.location.href = 'Loggin.html';
+        });
+        </script>
+        </body></html>";
+        exit();
+    }
 }}
 ?>
