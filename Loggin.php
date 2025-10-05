@@ -37,9 +37,34 @@
     if ($adminResult->num_rows === 1) {
     $adminRow = $adminResult->fetch_assoc();
 
-     if ($Password === $adminRow['adminpassword']) {
+    if ($Password === $adminRow['adminpassword']) {
         $_SESSION['admin_username'] = $adminRow['adminusername'];
         header("Location: dashboard.html");
         exit();
-}
+    } else {
+        echo "
+        <html><head>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        </head><body>
+        <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Incorrect admin password.',
+            confirmButtonText: 'Retry'
+        }).then(() => {
+            window.location.href = 'Loggin.html';
+        });
+        </script>
+        </body></html>";
+        exit();
+    }
+    // Check customer login
+$stmt = $con->prepare("SELECT email, password, name FROM customer WHERE email = ?");
+$stmt->bind_param("s", $Email);
+$stmt->execute();
+$customerResult = $stmt->get_result();
+
+
+}}
 ?>
