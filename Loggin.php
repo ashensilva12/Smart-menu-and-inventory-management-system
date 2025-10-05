@@ -1,11 +1,11 @@
 <?php
-    session_start();
+session_start();
 
-    $Email = trim($_POST['email'] ?? '');
-    $Password = trim($_POST['password'] ?? '');
+$Email = trim($_POST['email'] ?? '');
+$Password = trim($_POST['password'] ?? '');
 
-    // If fields are empty, show SweetAlert2 popup and redirect
-    if ($Email === '' || $Password === '') {
+// If fields are empty, show SweetAlert2 popup and redirect
+if ($Email === '' || $Password === '') {
     echo "
     <html><head>
     <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -22,19 +22,20 @@
     </script>
     </body></html>";
     exit();
-    }
-    $con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+}
 
-    if ($con->connect_error) {
+$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
+}
 
-    // Check if it's admin login first
-    $stmt = $con->prepare("SELECT adminusername, adminpassword FROM admin WHERE adminusername = ?");
-    $stmt->bind_param("s", $Email);
-    $stmt->execute();
-    $adminResult = $stmt->get_result();
+// Check if it's admin login first
+$stmt = $con->prepare("SELECT adminusername, adminpassword FROM admin WHERE adminusername = ?");
+$stmt->bind_param("s", $Email);
+$stmt->execute();
+$adminResult = $stmt->get_result();
 
-    if ($adminResult->num_rows === 1) {
+if ($adminResult->num_rows === 1) {
     $adminRow = $adminResult->fetch_assoc();
 
     if ($Password === $adminRow['adminpassword']) {
@@ -59,7 +60,9 @@
         </body></html>";
         exit();
     }
-    // Check customer login
+}
+
+// Check customer login
 $stmt = $con->prepare("SELECT email, password, name FROM customer WHERE email = ?");
 $stmt->bind_param("s", $Email);
 $stmt->execute();
@@ -73,7 +76,7 @@ if ($customerResult->num_rows === 1) {
         $_SESSION['customer_email'] = $row['email'];
         header("Location: home.html");
         exit();
-        } else {
+    } else {
         echo "
         <html><head>
         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -91,7 +94,7 @@ if ($customerResult->num_rows === 1) {
         </body></html>";
         exit();
     }
-    } else {
+} else {
     echo "
     <html><head>
     <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -109,5 +112,4 @@ if ($customerResult->num_rows === 1) {
     </body></html>";
     exit();
 }
-}}
 ?>
