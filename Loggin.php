@@ -68,5 +68,10 @@ $customerResult = $stmt->get_result();
 if ($customerResult->num_rows === 1) {
     $row = $customerResult->fetch_assoc();
 
+    if ($Password === $row['password']) {
+        $_SESSION['customer_name'] = $row['name'];
+        $_SESSION['customer_email'] = $row['email'];
+        header("Location: home.html");
+        exit();
 }}
 ?>
