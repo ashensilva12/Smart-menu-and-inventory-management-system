@@ -36,5 +36,10 @@
 
     if ($adminResult->num_rows === 1) {
     $adminRow = $adminResult->fetch_assoc();
+
+     if ($Password === $adminRow['adminpassword']) {
+        $_SESSION['admin_username'] = $adminRow['adminusername'];
+        header("Location: dashboard.html");
+        exit();
 }
 ?>
