@@ -65,6 +65,8 @@ $stmt->bind_param("s", $Email);
 $stmt->execute();
 $customerResult = $stmt->get_result();
 
+if ($customerResult->num_rows === 1) {
+    $row = $customerResult->fetch_assoc();
 
 }}
 ?>
