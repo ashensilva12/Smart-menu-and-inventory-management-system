@@ -33,5 +33,8 @@
     $stmt->bind_param("s", $Email);
     $stmt->execute();
     $adminResult = $stmt->get_result();
+
+    if ($adminResult->num_rows === 1) {
+    $adminRow = $adminResult->fetch_assoc();
 }
 ?>
