@@ -111,5 +111,6 @@ if ($customerResult->num_rows === 1) {
     </script>
     </body></html>";
     exit();
+    
 }
 ?>
