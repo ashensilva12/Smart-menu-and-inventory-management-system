@@ -142,3 +142,10 @@ nav ul li a:hover {
     padding-left: 30px;
     
 }
+.display{
+    display: flex;
+}
+.menu-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
