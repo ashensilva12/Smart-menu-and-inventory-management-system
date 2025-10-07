@@ -121,3 +121,7 @@ nav ul li a:hover {
     transition: all 0.3s;
     border-bottom: 3px solid transparent;
 }
+.category-btn.active, .category-btn:hover {
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+}
