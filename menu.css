@@ -165,3 +165,13 @@ nav ul li a:hover {
 .menu-item-content {
     padding: 20px;
 }
+.menu-item-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.menu-item-title h3 {
+    font-size: 1.3rem;
+    color: var(--dark-color);
+}
