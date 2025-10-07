@@ -102,3 +102,10 @@ nav ul li a:hover {
     font-size: 1.1rem;
     color: #666;
 }
+
+.menu-categories {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
