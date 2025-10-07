@@ -98,3 +98,7 @@ nav ul li a:hover {
     font-size: 2.5rem;
     margin-bottom: 15px;
 }
+.section-title p {
+    font-size: 1.1rem;
+    color: #666;
+}
