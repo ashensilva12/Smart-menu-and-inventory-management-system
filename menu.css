@@ -240,3 +240,14 @@ nav ul li a:hover {
     font-size: 1.5rem;
     color: var(--dark-color);
 }
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.cart-items {
+    padding: 20px;
+}
