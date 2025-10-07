@@ -162,3 +162,6 @@ nav ul li a:hover {
 .menu-item:hover .menu-item-img img {
     transform: scale(1.1);
 }
+.menu-item-content {
+    padding: 20px;
+}
