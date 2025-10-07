@@ -62,3 +62,8 @@ nav ul li a:hover {
 .current_page{
     color:var(--primary-color);
 }
+/* Hero Section */
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
