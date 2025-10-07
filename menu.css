@@ -175,3 +175,14 @@ nav ul li a:hover {
     font-size: 1.3rem;
     color: var(--dark-color);
 }
+.menu-item-price {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.menu-item-desc {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
