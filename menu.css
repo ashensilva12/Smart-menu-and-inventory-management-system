@@ -85,3 +85,7 @@ nav ul li a:hover {
 .btn:hover {
     background-color: #c1121f;
 }
+/* Menu Section */
+.menu-section {
+    padding: 60px 0;
+}
