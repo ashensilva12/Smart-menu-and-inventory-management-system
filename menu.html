@@ -104,5 +104,11 @@
             t.addEventListener('mouseleave', Swal.resumeTimer);
         }
     });
+        document.addEventListener('DOMContentLoaded', () => {
+        loadMenuItems();
+        initializeCart();
+        setupCategoryFilter();
+        setupCheckout();
+    });
 </body>
 </html>
