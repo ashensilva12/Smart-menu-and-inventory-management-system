@@ -47,3 +47,6 @@ nav ul {
     display: flex;
     list-style: none;
 }
+nav ul li {
+    margin-left: 20px;
+}
