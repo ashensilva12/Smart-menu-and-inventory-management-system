@@ -149,3 +149,7 @@ nav ul li a:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
+.menu-item-img {
+    height: 200px;
+    overflow: hidden;
+}
