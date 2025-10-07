@@ -98,5 +98,11 @@
         showConfirmButton: false,
         timer: 1400,
         timerProgressBar: true,
+            
+        didOpen: (t) => {
+            t.addEventListener('mouseenter', Swal.stopTimer);
+            t.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
 </body>
 </html>
