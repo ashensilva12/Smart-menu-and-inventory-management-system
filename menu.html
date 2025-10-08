@@ -141,6 +141,11 @@
             cartIcon?.addEventListener('click', toggleCart);
             closeCart?.addEventListener('click', toggleCart);
             cartOverlay?.addEventListener('click', toggleCart);
+
+        function toggleCart() {
+            cartSidebar.classList.toggle('active');
+            cartOverlay.classList.toggle('active');
+        }
         }
     </script>
 </body>
