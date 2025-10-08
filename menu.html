@@ -110,6 +110,13 @@
         setupCategoryFilter();
         setupCheckout();
     });
+    // Load menu items from PHP and bind add-to-cart buttons
+    function loadMenuItems() {
+        fetch('menu.php')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch menu items');
+                return response.text();
+            })
     </script>
 </body>
 </html>
