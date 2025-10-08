@@ -270,3 +270,6 @@ nav ul li a:hover {
     height: 100%;
     object-fit: cover;
 }
+.cart-item-details {
+    flex: 1;
+}
