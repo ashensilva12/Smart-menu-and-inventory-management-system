@@ -137,6 +137,9 @@
             const cartSidebar = document.getElementById('cart-sidebar');
             const cartOverlay = document.getElementById('cart-overlay');
             const closeCart = document.getElementById('close-cart');
+
+            cartIcon?.addEventListener('click', toggleCart);
+            closeCart?.addEventListener('click', toggleCart);
         }
     </script>
 </body>
