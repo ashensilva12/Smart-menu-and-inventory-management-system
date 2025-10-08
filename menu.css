@@ -355,3 +355,8 @@ nav ul li a:hover {
     position: relative;
     cursor: pointer;
 }
+.logging{
+    position: relative;
+    cursor: pointer;
+    margin-left: 20px;
+}
