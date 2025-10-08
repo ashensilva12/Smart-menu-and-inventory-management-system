@@ -309,3 +309,8 @@ nav ul li a:hover {
     padding: 20px;
     border-top: 1px solid #eee;
 }
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
