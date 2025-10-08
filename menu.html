@@ -110,7 +110,7 @@
         setupCategoryFilter();
         setupCheckout();
     });
-    
+    // Load menu items from PHP and bind add-to-cart buttons
     function loadMenuItems() {
         fetch('menu.php')
             .then(response => {
