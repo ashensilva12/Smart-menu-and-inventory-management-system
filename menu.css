@@ -286,3 +286,12 @@ nav ul li a:hover {
     display: flex;
     align-items: center;
 }
+.quantity-btn {
+    background-color: #eee;
+    border: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
