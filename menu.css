@@ -273,3 +273,7 @@ nav ul li a:hover {
 .cart-item-details {
     flex: 1;
 }
+.cart-item-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
