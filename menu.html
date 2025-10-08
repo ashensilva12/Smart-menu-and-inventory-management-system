@@ -117,6 +117,11 @@
                 if (!response.ok) throw new Error('Failed to fetch menu items');
                 return response.text();
             })
+            .then(html => {
+                document.getElementById('menu-items').innerHTML = html;
+                setupAddToCartButtons();
+                setupCategoryFilter(); // rebind category filters to new elements
+            })
     </script>
 </body>
 </html>
