@@ -351,3 +351,7 @@ nav ul li a:hover {
     opacity: 1;
     visibility: visible;
 }
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
