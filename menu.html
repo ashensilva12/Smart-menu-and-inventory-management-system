@@ -125,6 +125,13 @@
             .catch(error => {
                 console.error('Error loading menu:', error);
                 document.getElementById('menu-items').innerHTML = '<p class="error">Failed to load menu.</p>';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Menu Load Failed',
+                    text: 'Please try again later.'
+                });
+            });
+    }
     </script>
 </body>
 </html>
