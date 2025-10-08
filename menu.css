@@ -305,3 +305,7 @@ nav ul li a:hover {
     cursor: pointer;
     font-size: 0.9rem;
 }
+.cart-total {
+    padding: 20px;
+    border-top: 1px solid #eee;
+}
