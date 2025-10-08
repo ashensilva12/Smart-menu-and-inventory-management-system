@@ -332,3 +332,6 @@ nav ul li a:hover {
     margin-top: 20px;
     transition: background-color 0.3s;
 }
+.checkout-btn:hover {
+    background-color: #21867a;
+}
