@@ -319,3 +319,16 @@ nav ul li a:hover {
     font-size: 1.2rem;
     color: var(--dark-color);
 }
+.checkout-btn {
+    display: block;
+    width: 100%;
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
