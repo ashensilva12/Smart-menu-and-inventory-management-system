@@ -170,11 +170,15 @@
                 el.className = 'cart-item';
                 el.innerHTML = `
                 <div class="cart-item-img"><img src="${item.image}" alt="${item.name}"></div>
-                                    <div class="cart-item-details">
+                        <div class="cart-item-details">
                         <div class="cart-item-title">${item.name}</div>
                         <div class="cart-item-price">Rs.${item.price.toFixed(2)}</div>
                         <div class="cart-item-quantity">
-                            <button class="quantity-btn minus" data-name="${item.name}">-</button>
+                        <button class="quantity-btn minus" data-name="${item.name}">-</button>
+                        <span class="quantity">${item.quantity}</span>
+                        <button class="quantity-btn plus" data-name="${item.name}">+</button>
+
+
     </script>
 </body>
 </html>
