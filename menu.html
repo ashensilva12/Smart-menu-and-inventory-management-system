@@ -208,6 +208,9 @@
         });
         document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
         btn.onclick = () => {
+                const name = btn.dataset.name;
+                const item = cart.find(i => i.name === name);
+                if (!item) return;
 
     </script>
 </body>
