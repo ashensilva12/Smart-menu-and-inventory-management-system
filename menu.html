@@ -167,6 +167,8 @@
             cart.forEach(item => {
                 subtotal += item.price * item.quantity;
                 const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
     </script>
 </body>
 </html>
