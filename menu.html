@@ -195,7 +195,9 @@
                 // Bind quantity and remove buttons
         document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
         btn.onclick = () => {
-
+        const name = btn.dataset.name;
+        const item = cart.find(i => i.name === name);
+        if (!item) return;
 
 
     </script>
