@@ -192,6 +192,10 @@
         cartTotal.textContent = `Rs.${total.toFixed(2)}`;
         cartCount.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
 
+                // Bind quantity and remove buttons
+        document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+        btn.onclick = () => {
+
 
 
     </script>
