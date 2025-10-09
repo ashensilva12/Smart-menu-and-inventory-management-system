@@ -217,8 +217,9 @@
         });
         document.querySelectorAll('.remove-item').forEach(btn => {
         btn.onclick = async () => {
-
-
+        const name = btn.dataset.name;
+        const result = await Swal.fire({
+        icon: 'question',
     </script>
 </body>
 </html>
