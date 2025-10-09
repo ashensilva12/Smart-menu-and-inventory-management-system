@@ -200,7 +200,12 @@
         if (!item) return;
         if (item.quantity > 1) {
                     item.quantity--;
-                } else 
+                } else {
+                    cart = cart.filter(i => i.name !== name);
+                }
+                updateCart();
+            };
+        });
 
     </script>
 </body>
