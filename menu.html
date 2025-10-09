@@ -163,7 +163,8 @@
         cartItemsContainer.innerHTML = '';
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
-        }
+        } else {
+            cart.forEach(item => {
     </script>
 </body>
 </html>
