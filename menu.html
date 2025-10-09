@@ -187,6 +187,8 @@
 
         const charge = subtotal * 0.1;
         const total = subtotal + charge;
+        cartSubtotal.textContent = `Rs.${subtotal.toFixed(2)}`;
+        cartCharge.textContent = `Rs.${charge.toFixed(2)}`;
 
 
     </script>
