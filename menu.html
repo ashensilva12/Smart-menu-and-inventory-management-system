@@ -157,6 +157,13 @@
         const cartCharge = document.getElementById('cart-charge');
         const cartTotal = document.getElementById('cart-total');
         const cartCount = document.querySelector('.cart-count');
+
+         let subtotal = 0;
+
+        cartItemsContainer.innerHTML = '';
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
+        }
     </script>
 </body>
 </html>
