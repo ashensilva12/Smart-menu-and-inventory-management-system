@@ -198,7 +198,9 @@
         const name = btn.dataset.name;
         const item = cart.find(i => i.name === name);
         if (!item) return;
-
+        if (item.quantity > 1) {
+                    item.quantity--;
+                } else 
 
     </script>
 </body>
