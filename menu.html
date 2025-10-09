@@ -165,6 +165,8 @@
             cartItemsContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
         } else {
             cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                const el = document.createElement('div');
     </script>
 </body>
 </html>
