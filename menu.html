@@ -211,6 +211,11 @@
                 const name = btn.dataset.name;
                 const item = cart.find(i => i.name === name);
                 if (!item) return;
+                                item.quantity++;
+                updateCart();
+            };
+        });
+
 
     </script>
 </body>
