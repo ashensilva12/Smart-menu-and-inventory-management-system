@@ -225,7 +225,15 @@
         showCancelButton: true,
         confirmButtonText: 'Remove',
         cancelButtonText: 'Keep',
+         });
+        if (result.isConfirmed) {
+        cart = cart.filter(i => i.name !== name);
+        updateCart();
+        Toast.fire({ icon: 'success', title: 'Item removed' });
+                }
+            };
         });
+    }
     </script>
 </body>
 </html>
