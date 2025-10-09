@@ -220,6 +220,9 @@
         const name = btn.dataset.name;
         const result = await Swal.fire({
         icon: 'question',
+        title: 'Remove item?',
+        text: `Remove "${name}" from your cart?`,
+        showCancelButton: true,
     </script>
 </body>
 </html>
