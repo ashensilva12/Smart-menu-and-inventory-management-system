@@ -189,6 +189,9 @@
         const total = subtotal + charge;
         cartSubtotal.textContent = `Rs.${subtotal.toFixed(2)}`;
         cartCharge.textContent = `Rs.${charge.toFixed(2)}`;
+        cartTotal.textContent = `Rs.${total.toFixed(2)}`;
+        cartCount.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
+
 
 
     </script>
