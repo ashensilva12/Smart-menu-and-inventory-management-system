@@ -339,6 +339,15 @@
                     icon: data.success ? 'success' : 'error',
                     title: data.success ? 'Order Placed!' : 'Checkout Failed',
                     text: data.message
+                                    }).then(() => {
+                    if (data.success) {
+                        cart = [];
+                        updateCart();
+                        document.getElementById('cart-sidebar').classList.remove('active');
+                        document.getElementById('cart-overlay').classList.remove('active');
+                    }
+                });
+            })
     }
     </script>
 </body>
