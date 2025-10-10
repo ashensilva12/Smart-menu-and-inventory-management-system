@@ -309,6 +309,17 @@
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const charge = subtotal * 0.1;
             const total = subtotal + charge;
+                        // Create a properly formatted order object
+            const orderData = {
+                cart: cart.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                subtotal: subtotal,
+                charge: charge,
+                total: total
+            };
     }
     </script>
 </body>
