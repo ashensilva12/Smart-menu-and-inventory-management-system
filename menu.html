@@ -280,6 +280,8 @@
     function setupCheckout() {
         const checkoutBtn = document.getElementById('checkout-btn');
         if (!checkoutBtn) return;
+            checkoutBtn.addEventListener('click', async () => {
+            if (cart.length === 0) {
     }
     </script>
 </body>
