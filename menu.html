@@ -334,6 +334,11 @@
                 }
                 return res.json();
             })
+            .then(data => {
+                Swal.fire({
+                    icon: data.success ? 'success' : 'error',
+                    title: data.success ? 'Order Placed!' : 'Checkout Failed',
+                    text: data.message
     }
     </script>
 </body>
