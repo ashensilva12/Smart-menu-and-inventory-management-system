@@ -243,6 +243,14 @@
             menuItem.querySelector('.menu-item-price')
             .textContent.replace('Rs.', '').replace(',', '')
             );
+            const image = menuItem.querySelector('.menu-item-img img').src;
+
+            const existing = cart.find(item => item.name === name);
+                if (existing) {
+                    existing.quantity++;
+                } else {
+                    cart.push({ name, price, image, quantity: 1 });
+                }
     }
     </script>
 </body>
