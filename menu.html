@@ -251,6 +251,16 @@
                 } else {
                     cart.push({ name, price, image, quantity: 1 });
                 }
+                updateCart();
+
+                // Open cart & show toast
+                document.getElementById('cart-sidebar').classList.add('active');
+                document.getElementById('cart-overlay').classList.add('active');
+                Toast.fire({ icon: 'success', title: 'Added to cart' });
+            });
+        });
+        }
+        
     }
     </script>
 </body>
