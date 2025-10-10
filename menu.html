@@ -269,6 +269,9 @@
         const cat = btn.dataset.category;
         buttons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        items.forEach(item => {
+        const itemCat = item.getAttribute('data-category');
+        item.style.display = (cat === 'all' || itemCat === cat) ? 'block' : 'none';
     }
     </script>
 </body>
