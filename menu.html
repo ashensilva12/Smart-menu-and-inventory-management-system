@@ -348,6 +348,16 @@
                     }
                 });
             })
+                        .catch(err => {
+                console.error('Checkout error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Checkout failed: ' + err.message
+                });
+            });
+        });
+    }
     }
     </script>
 </body>
