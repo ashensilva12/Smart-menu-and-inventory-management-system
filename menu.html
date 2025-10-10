@@ -289,6 +289,11 @@
                 });
                 return;
             }
+                        // Friendly pre-confirmation
+            const pre = await Swal.fire({
+                icon: 'info',
+                title: 'Proceed to Checkout?',
+                html: `
     }
     </script>
 </body>
