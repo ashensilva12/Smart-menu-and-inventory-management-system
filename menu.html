@@ -237,6 +237,8 @@
         function setupAddToCartButtons() {
             document.querySelectorAll('.add-to-cart').forEach(button => {
             button.addEventListener('click', () => {
+            const menuItem = button.closest('.menu-item');
+            const name = menuItem.querySelector('h3').textContent;
     }
     </script>
 </body>
