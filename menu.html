@@ -239,6 +239,10 @@
             button.addEventListener('click', () => {
             const menuItem = button.closest('.menu-item');
             const name = menuItem.querySelector('h3').textContent;
+            const price = parseFloat(
+            menuItem.querySelector('.menu-item-price')
+            .textContent.replace('Rs.', '').replace(',', '')
+            );
     }
     </script>
 </body>
