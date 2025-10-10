@@ -307,6 +307,8 @@
             if (!pre.isConfirmed) return;
 
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const charge = subtotal * 0.1;
+            const total = subtotal + charge;
     }
     </script>
 </body>
