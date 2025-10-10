@@ -282,6 +282,13 @@
         if (!checkoutBtn) return;
             checkoutBtn.addEventListener('click', async () => {
             if (cart.length === 0) {
+                            Swal.fire({
+                    icon: 'warning',
+                    title: 'Cart is empty',
+                    text: 'Add some delicious items first!'
+                });
+                return;
+            }
     }
     </script>
 </body>
