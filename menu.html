@@ -294,6 +294,12 @@
                 icon: 'info',
                 title: 'Proceed to Checkout?',
                 html: `
+                        <div style="text-align:left">
+                        <p><strong>Items:</strong> ${cart.reduce((s,i)=>s+i.quantity,0)}</p>
+                        <p><strong>Subtotal:</strong> Rs.${cart.reduce((s,i)=>s+i.price*i.quantity,0).toFixed(2)}</p>
+                        <p><strong>Service Charge (10%):</strong> Calculated at checkout</p>
+                    </div>
+                `,
     }
     </script>
 </body>
