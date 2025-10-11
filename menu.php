@@ -18,5 +18,7 @@
         $desc = htmlspecialchars($row['item_description']);
         $image = htmlspecialchars($row['item_image']);
         $id = intval($row['id']);  // Added for data-id
+        echo '<div class="menu-item" data-category="' . $category . '" data-id="' . $id . '">';
+        echo '  <div class="menu-item-img"><img src="' . $image . '" alt="' . $name . '"></div>';
 
 ?>
