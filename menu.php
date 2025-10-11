@@ -32,4 +32,8 @@
         echo '  </div>';
         echo '</div>';
     }
+} else {
+    echo "<p>No menu items available. Please add some items first.</p>";
+}
+$con->close();
 ?>
