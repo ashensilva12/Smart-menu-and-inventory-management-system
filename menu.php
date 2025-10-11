@@ -16,6 +16,7 @@
         $name = htmlspecialchars($row['item_name']);
         $price = number_format($row['item_price'], 2, '.', '');
         $desc = htmlspecialchars($row['item_description']);
-
+        $image = htmlspecialchars($row['item_image']);
+        $id = intval($row['id']);  // Added for data-id
 
 ?>
