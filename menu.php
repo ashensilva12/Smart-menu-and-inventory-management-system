@@ -14,6 +14,8 @@
     while ($row = $result->fetch_assoc()) {
         $category = htmlspecialchars($row['item_category']);
         $name = htmlspecialchars($row['item_name']);
+        $price = number_format($row['item_price'], 2, '.', '');
+        $desc = htmlspecialchars($row['item_description']);
 
 
 ?>
