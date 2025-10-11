@@ -23,5 +23,8 @@
         echo '  <div class="menu-item-content">';
         echo '    <div class="menu-item-title">';
         echo "      <h3>$name</h3>";
-
+        echo "      <span class=\"menu-item-price\">Rs.$price</span>";
+        echo '    </div>';
+        echo "    <p class=\"menu-item-desc\">$desc</p>";
+        echo '    <div class="menu-item-footer">';
 ?>
