@@ -6,5 +6,9 @@
 
     $sql = "SELECT * FROM menu ORDER BY id DESC";
     $result = $con->query($sql);
+    if ($result === false) {
+    die("<p class='error'>Query failed: " . $con->error . "</p>");
+}
+
 }
 ?>
