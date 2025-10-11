@@ -27,4 +27,9 @@
         echo '    </div>';
         echo "    <p class=\"menu-item-desc\">$desc</p>";
         echo '    <div class="menu-item-footer">';
+        echo '      <button class="add-to-cart">Add to Cart</button>';
+        echo '    </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
 ?>
