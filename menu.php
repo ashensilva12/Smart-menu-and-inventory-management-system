@@ -20,5 +20,8 @@
         $id = intval($row['id']);  // Added for data-id
         echo '<div class="menu-item" data-category="' . $category . '" data-id="' . $id . '">';
         echo '  <div class="menu-item-img"><img src="' . $image . '" alt="' . $name . '"></div>';
+        echo '  <div class="menu-item-content">';
+        echo '    <div class="menu-item-title">';
+        echo "      <h3>$name</h3>";
 
 ?>
