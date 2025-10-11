@@ -10,6 +10,10 @@
     if ($result === false) {
         die("<p class='error'>Query failed: " . $con->error . "</p>");
     }
+    if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $category = htmlspecialchars($row['item_category']);
+        $name = htmlspecialchars($row['item_name']);
 
 
 ?>
