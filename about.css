@@ -128,3 +128,7 @@ nav ul li a:hover {
     margin-bottom: 20px;
     border: 5px solid var(--accent-color);
 }
+.team-member h3 {
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
