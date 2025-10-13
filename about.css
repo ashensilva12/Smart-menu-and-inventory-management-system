@@ -109,3 +109,10 @@ nav ul li a:hover {
     gap: 30px;
     margin-top: 40px;
 }
+    .team-member {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
+    }
