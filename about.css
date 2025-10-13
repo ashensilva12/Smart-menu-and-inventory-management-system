@@ -64,3 +64,6 @@ nav ul li a {
 nav ul li a:hover {
     color: var(--accent-color);
 }
+.current_page{
+    color:var(--primary-color);
+}
