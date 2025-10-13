@@ -132,3 +132,8 @@ nav ul li a:hover {
     color: var(--dark-color);
     margin-bottom: 5px;
 }
+.team-member p {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
