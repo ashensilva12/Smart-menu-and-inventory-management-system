@@ -84,3 +84,6 @@ nav ul li a:hover {
     height: auto;
     display: block;
 }
+.about-text {
+    flex: 1;
+}
