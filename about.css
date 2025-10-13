@@ -73,3 +73,9 @@ nav ul li a:hover {
     gap: 50px;
     margin-bottom: 60px;
 }
+.about-image {
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
