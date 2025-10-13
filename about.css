@@ -24,3 +24,10 @@ body {
     margin: 0 auto;
     padding: 20px;
 }
+/* Header Styles */
+header {
+    background-color: var(--dark-color);
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
