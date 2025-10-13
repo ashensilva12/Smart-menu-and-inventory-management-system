@@ -98,3 +98,8 @@ nav ul li a:hover {
     line-height: 1.8;
     margin-bottom: 20px;
 }
+.team-section {
+    background-color: var(--light-color);
+    padding: 60px 0;
+    text-align: center;
+}
