@@ -62,3 +62,8 @@ nav ul li a:hover {
 .current_page{
     color:var(--primary-color);
 }
+    .contact-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+    }
