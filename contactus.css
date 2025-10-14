@@ -135,3 +135,7 @@ nav ul li a:hover {
         border-radius: 5px;
         font-size: 1rem;
     }
+        .form-group textarea {
+        height: 150px;
+        resize: vertical;
+    }
