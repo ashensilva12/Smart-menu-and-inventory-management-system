@@ -104,3 +104,6 @@ nav ul li a:hover {
         text-decoration: none;
         line-height: 1.6;
     }
+    .info-content a:hover {
+        color: var(--primary-color);
+    }
