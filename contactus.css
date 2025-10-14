@@ -83,3 +83,15 @@ nav ul li a:hover {
         align-items: flex-start;
         margin-bottom: 25px;
     }
+    .info-icon {
+        background-color: var(--dark-color);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
