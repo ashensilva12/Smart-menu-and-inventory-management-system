@@ -100,6 +100,40 @@
 
     form.addEventListener("submit", function (e) {
     e.preventDefault();
+         Swal.fire({
+        title: 'Send Message?',
+        text: "Are you sure you want to send this message?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, send it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const formData = new FormData(form);
+
+          fetch('contactus.php', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.text())
+          .then(data => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Message Sent!',
+              text: 'Thank you for your message. We will get back to you soon.',
+            });
+            form.reset();
+          })
+          .catch(error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops!',
+              text: 'Something went wrong. Please try again later.',
+            });
+          });
+        }
+      });
+    });
   </script>
 </body>
 </html>
