@@ -78,3 +78,8 @@ nav ul li a:hover {
         margin-bottom: 30px;
         font-size: 2rem;
     }
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 25px;
+    }
