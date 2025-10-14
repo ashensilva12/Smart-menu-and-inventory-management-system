@@ -67,3 +67,9 @@ nav ul li a:hover {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 40px;
     }
+    .contact-info {
+        background-color: var(--light-color);
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
