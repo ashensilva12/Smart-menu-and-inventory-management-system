@@ -43,3 +43,7 @@ header {
 .logo span {
     color: var(--primary-color);
 }
+nav ul {
+    display: flex;
+    list-style: none;
+}
