@@ -56,3 +56,6 @@ nav ul li a {
     font-weight: 500;
     transition: color 0.3s;
 }
+nav ul li a:hover {
+    color: var(--accent-color);
+}
