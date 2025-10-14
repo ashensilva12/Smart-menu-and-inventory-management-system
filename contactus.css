@@ -99,3 +99,8 @@ nav ul li a:hover {
         color: var(--dark-color);
         margin-bottom: 5px;
     }
+    .info-content p, .info-content a {
+        color: #666;
+        text-decoration: none;
+        line-height: 1.6;
+    }
