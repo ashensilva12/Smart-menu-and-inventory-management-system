@@ -118,3 +118,6 @@ nav ul li a:hover {
         margin-bottom: 30px;
         font-size: 2rem;
     }
+    .form-group {
+        margin-bottom: 20px;
+    }
