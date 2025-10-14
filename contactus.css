@@ -50,3 +50,9 @@ nav ul {
 nav ul li {
     margin-left: 20px;
 }
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
