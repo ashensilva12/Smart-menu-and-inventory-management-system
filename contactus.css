@@ -107,3 +107,9 @@ nav ul li a:hover {
     .info-content a:hover {
         color: var(--primary-color);
     }
+    .contact-form {
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
