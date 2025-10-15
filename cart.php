@@ -44,7 +44,13 @@
         <style>.swal2-container{z-index:9999 !important}</style>
 </head>
 <body>
-    
+    <script>
+    (async () => {
+        // Payload from form POST (if any); otherwise this will post an empty object.
+        const payload = <?php echo json_encode($__payload, JSON_UNESCAPED_SLASHES); ?>;
+        const hasCart = Array.isArray(payload.cart) && payload.cart.length > 0;
+
+    </script>
 </body>
 </html>
 
