@@ -99,6 +99,12 @@ set_exception_handler(function($e) {
     echo json_encode(["success" => false, "message" => "Server error"]);
     exit;
 });
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    log_error("PHP Error [$errno] $errstr in $errfile:$errline");
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Server error"]);
+    exit;
+});
 
 ?>
 
