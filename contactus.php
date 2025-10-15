@@ -37,5 +37,8 @@
             <p><strong>Subject:</strong> $subject</p>
             <p><strong>Message:</strong><br>$message</p>
         ";
+        $mail->send();
 
+        echo "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 ?>
