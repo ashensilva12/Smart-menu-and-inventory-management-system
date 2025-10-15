@@ -52,5 +52,20 @@
             });
         </script>
         ";
-
+    } catch (Exception $e) {
+        echo "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Sending Failed',
+                text: 'Mailer Error: " . $mail->ErrorInfo . "',
+                confirmButtonText: 'Back'
+            }).then(() => {
+                window.history.back();
+            });
+        </script>
+        ";
+    }
+}
 ?>
