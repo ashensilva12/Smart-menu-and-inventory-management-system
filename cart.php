@@ -113,5 +113,12 @@ if (empty($_SESSION['customer_email'])) {
 }
 $customerEmail = $_SESSION['customer_email'];
 
+// Read JSON input
+$input = file_get_contents('php://input');
+if (empty($input)) {
+    echo json_encode(["success" => false, "message" => "No data received"]);
+    exit;
+}
+
 ?>
 
