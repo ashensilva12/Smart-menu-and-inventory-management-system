@@ -21,6 +21,21 @@
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
+
         
+        // Recipients
+        $mail->setFrom('admin@ashenlakshitha.online', 'Kings Menu Contact');
+        $mail->addAddress('ashenlakshitha12@gmail.com');    // Admin email
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = "New Contact Message: $subject";
+        $mail->Body    = "
+            <h3>New message received</h3>
+            <p><strong>Name:</strong> $name</p>
+            <p><strong>Email:</strong> $email</p>
+            <p><strong>Subject:</strong> $subject</p>
+            <p><strong>Message:</strong><br>$message</p>
+        ";
 
 ?>
