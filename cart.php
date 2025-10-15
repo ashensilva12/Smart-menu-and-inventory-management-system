@@ -49,6 +49,15 @@
         // Payload from form POST (if any); otherwise this will post an empty object.
         const payload = <?php echo json_encode($__payload, JSON_UNESCAPED_SLASHES); ?>;
         const hasCart = Array.isArray(payload.cart) && payload.cart.length > 0;
+        try {
+            const res = await fetch(window.location.pathname + window.location.search, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(hasCart ? payload : {})
+            });
 
     </script>
 </body>
