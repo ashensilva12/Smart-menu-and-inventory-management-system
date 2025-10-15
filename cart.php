@@ -13,6 +13,11 @@
 
     if (!$__is_json_request) {
     // Rebuild a minimal payload from form POST if present (optional)
-
+        $__payload = [
+        'cart'     => [],
+        'subtotal' => isset($_POST['subtotal']) ? (float)$_POST['subtotal'] : 0,
+        'charge'   => isset($_POST['charge'])   ? (float)$_POST['charge']   : 0,
+        'total'    => isset($_POST['total'])    ? (float)$_POST['total']    : 0,
+    ];
 ?>
 
