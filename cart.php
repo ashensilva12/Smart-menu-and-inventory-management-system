@@ -82,6 +82,9 @@
 <?php
     exit; // Prevent the JSON-only code below from running during non-JSON visits
 }
+// Enable error display for debugging (disable in production)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 ?>
 
