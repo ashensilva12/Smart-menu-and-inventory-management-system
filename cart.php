@@ -65,6 +65,17 @@
                 title: ok ? 'Order Placed!' : 'Checkout Status',
                 text: (data && data.message) ? String(data.message) : (ok ? 'Success' : 'No data received or invalid response')
             });
+                        // Redirect after popup
+            window.location.href = 'menu.html';
+        } catch (err) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Network Error',
+                text: String(err && err.message ? err.message : err)
+            });
+            window.location.href = 'menu.html';
+        }
+    })();
     </script>
 </body>
 </html>
