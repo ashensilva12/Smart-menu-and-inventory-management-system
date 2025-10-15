@@ -19,5 +19,10 @@
         'charge'   => isset($_POST['charge'])   ? (float)$_POST['charge']   : 0,
         'total'    => isset($_POST['total'])    ? (float)$_POST['total']    : 0,
     ];
+        if (!empty($_POST['name']) && is_array($_POST['name'])) {
+        $names  = (array)($_POST['name'] ?? []);
+        $prices = (array)($_POST['price'] ?? []);
+        $qtys   = (array)($_POST['quantity'] ?? []);
+        $count  = max(count($names), count($prices), count($qtys));
 ?>
 
