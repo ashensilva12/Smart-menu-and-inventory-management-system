@@ -10,4 +10,9 @@
     $__accept = $_SERVER['HTTP_ACCEPT'] ?? '';
     $__ctype  = $_SERVER['CONTENT_TYPE'] ?? '';
     $__is_json_request = (stripos($__accept, 'application/json') !== false) || (stripos($__ctype, 'application/json') !== false);
+
+    if (!$__is_json_request) {
+    // Rebuild a minimal payload from form POST if present (optional)
+
 ?>
+
