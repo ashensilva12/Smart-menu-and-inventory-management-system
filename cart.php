@@ -19,7 +19,7 @@
         'charge'   => isset($_POST['charge'])   ? (float)$_POST['charge']   : 0,
         'total'    => isset($_POST['total'])    ? (float)$_POST['total']    : 0,
     ];
-        if (!empty($_POST['name']) && is_array($_POST['name'])) {
+    if (!empty($_POST['name']) && is_array($_POST['name'])) {
         $names  = (array)($_POST['name'] ?? []);
         $prices = (array)($_POST['price'] ?? []);
         $qtys   = (array)($_POST['quantity'] ?? []);
@@ -33,4 +33,18 @@
         }
     }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Processing Order…</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>.swal2-container{z-index:9999 !important}</style>
+</head>
+<body>
+    
+</body>
+</html>
 
