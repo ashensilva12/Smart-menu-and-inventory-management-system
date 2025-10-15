@@ -60,7 +60,11 @@
             });
             const data = await res.json().catch(() => ({}));
             const ok = (data && data.success === true);
-
+            await Swal.fire({
+                icon: ok ? 'success' : 'error',
+                title: ok ? 'Order Placed!' : 'Checkout Status',
+                text: (data && data.message) ? String(data.message) : (ok ? 'Success' : 'No data received or invalid response')
+            });
     </script>
 </body>
 </html>
