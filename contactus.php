@@ -8,4 +8,6 @@
     $email = htmlspecialchars(trim($_POST['email']));
     $subject = htmlspecialchars(trim($_POST['subject']));
     $message = htmlspecialchars(trim($_POST['message']));
+
+    $mail = new PHPMailer(true);
 ?>
