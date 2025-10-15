@@ -41,4 +41,16 @@
 
         echo "
         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Message Sent!',
+                text: 'Thank you, we have received your message.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = 'contactus.html';
+            });
+        </script>
+        ";
+
 ?>
