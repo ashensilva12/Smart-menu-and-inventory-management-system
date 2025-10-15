@@ -106,5 +106,12 @@ set_error_handler(function($errno, $errstr, $errfile, $errline) {
     exit;
 });
 
+// Check login (expects email in session)
+if (empty($_SESSION['customer_email'])) {
+    echo json_encode(["success" => false, "message" => "User not logged in"]);
+    exit;
+}
+$customerEmail = $_SESSION['customer_email'];
+
 ?>
 
