@@ -79,4 +79,9 @@
     </script>
 </body>
 </html>
+<?php
+    exit; // Prevent the JSON-only code below from running during non-JSON visits
+}
+
+?>
 
