@@ -24,5 +24,13 @@
         $prices = (array)($_POST['price'] ?? []);
         $qtys   = (array)($_POST['quantity'] ?? []);
         $count  = max(count($names), count($prices), count($qtys));
+        for ($i = 0; $i < $count; $i++) {
+            $__payload['cart'][] = [
+                'name'     => (string)($names[$i]  ?? ''),
+                'price'    => (float) ($prices[$i] ?? 0),
+                'quantity' => (int)   ($qtys[$i]   ?? 0),
+            ];
+        }
+    }
 ?>
 
