@@ -58,6 +58,8 @@
                 },
                 body: JSON.stringify(hasCart ? payload : {})
             });
+            const data = await res.json().catch(() => ({}));
+            const ok = (data && data.success === true);
 
     </script>
 </body>
