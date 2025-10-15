@@ -86,5 +86,13 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+header('Content-Type: application/json');
+
+// Log function
+function log_error($msg) {
+    file_put_contents(__DIR__ . '/cart_errors.log', date('Y-m-d H:i:s') . " - " . $msg . PHP_EOL, FILE_APPEND);
+}
+
+
 ?>
 
