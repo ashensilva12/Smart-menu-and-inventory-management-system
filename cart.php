@@ -92,7 +92,13 @@ header('Content-Type: application/json');
 function log_error($msg) {
     file_put_contents(__DIR__ . '/cart_errors.log', date('Y-m-d H:i:s') . " - " . $msg . PHP_EOL, FILE_APPEND);
 }
-
+// Global error handlers
+set_exception_handler(function($e) {
+    log_error("Exception: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Server error"]);
+    exit;
+});
 
 ?>
 
