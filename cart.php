@@ -301,6 +301,14 @@ try {
         $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
+        $mail->setFrom('admin@ashenlakshitha.online', 'The Kings Menu');
+        $mail->addAddress($customerEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Your Order Bill - The Kings Menu';
+        $mail->Body    = '<p>Thank you for your order!</p><p>Your bill is attached.</p>';
+        $mail->addAttachment($pdfFile, 'OrderBill.pdf');
+
     }
 ?>
 
