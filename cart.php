@@ -210,7 +210,14 @@ try {
         width:55%; max-width:320px; border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px;
         background:#ffffff;
       }
-
+              .row { display:flex; justify-content:space-between; margin:6px 0; }
+      .row.total { font-weight:700; font-size:13px; border-top:1px dashed #e5e7eb; padding-top:8px; margin-top:8px; }
+      .thanks {
+        margin-top:20px; text-align:center; color:#4b5563; font-size:12px;
+      }
+      .footer {
+        position:fixed; left:0; right:0; bottom:12px; text-align:center; font-size:10px; color:#6b7280;
+      }
 
             </style>
             <meta charset="UTF-8">
