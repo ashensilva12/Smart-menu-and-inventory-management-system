@@ -119,6 +119,17 @@ if (empty($input)) {
     echo json_encode(["success" => false, "message" => "No data received"]);
     exit;
 }
+$data = json_decode($input, true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    log_error("JSON decode error: " . json_last_error_msg());
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid data format",
+        "error"   => json_last_error_msg()
+    ]);
+    exit;
+}
+
 
 ?>
 
