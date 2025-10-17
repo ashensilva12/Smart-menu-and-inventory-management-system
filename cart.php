@@ -199,6 +199,13 @@ try {
         background:#f3f4f6; font-weight:700; text-transform:uppercase; font-size:11px;
         border-bottom:1px solid #e5e7eb; padding:8px 8px;
       }
+        tbody td { border-bottom:1px solid #f1f5f9; padding:8px 8px; vertical-align:top; }
+      tbody tr:nth-child(odd) { background:#fcfcfd; }
+      .c-name { width:52%; }
+      .c-price, .c-qty, .c-total { text-align:right; white-space:nowrap; }
+      .summary {
+        margin-top:14px; display:flex; justify-content:flex-end;
+      }
 
 
             </style>
