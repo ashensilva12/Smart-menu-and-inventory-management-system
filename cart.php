@@ -211,6 +211,13 @@ try {
           </tbody>
         </table>
       </div>
+            <div class="summary">
+        <div class="totals">
+          <div class="row"><div>Subtotal</div><div>Rs.'.number_format($subtotal, 2).'</div></div>
+          <div class="row"><div>Service Charge (10%)</div><div>Rs.'.number_format($charge, 2).'</div></div>
+          <div class="row total"><div>Total</div><div>Rs.'.number_format($total, 2).'</div></div>
+        </div>
+      </div>
         </body>
         </html>
     }
