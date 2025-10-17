@@ -180,9 +180,15 @@ try {
         </head>
         <body>
             <div class="brand-bar">
-            <div class="brand-title">The Kings Menu</div>
-            <div class="brand-sub">Good food • Good mood</div>
-      </div>
+                <div class="brand-title">The Kings Menu</div>
+                <div class="brand-sub">Good food • Good mood</div>
+            </div>
+            <div class="header">
+                <div class="left box">
+                <div class="kv"><strong>Invoice No:</strong> '.$invoiceNo.'</div>
+                <div class="kv"><strong>Date:</strong> '.$orderDate.'</div>
+                <div class="kv"><strong>Customer:</strong> '.htmlspecialchars($customerEmail, ENT_QUOTES, "UTF-8").'</div>
+            </div>
         </body>
         </html>
     }
