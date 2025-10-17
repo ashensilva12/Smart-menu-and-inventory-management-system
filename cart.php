@@ -175,6 +175,14 @@ try {
         <!DOCTYPE html>
         <html lang="en">
         <head>
+            <style>
+            @page { margin: 32px 28px 56px 28px; }
+            body { font-family: Arial, Helvetica, sans-serif; color:#222; font-size:12px; }
+            .brand-bar {
+            background:#111827; color:#fff; padding:14px 16px; border-radius:10px;
+            }
+
+            </style>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
