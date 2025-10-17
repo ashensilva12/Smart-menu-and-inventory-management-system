@@ -326,6 +326,14 @@ try {
     $DB_PASS = '1234';
     $DB_NAME = 'resturent';
 
+        // Count items
+    $itemsCount = 0;
+    foreach ($cart as $it) {
+        $qty = filter_var($it['quantity'], FILTER_VALIDATE_INT);
+        if ($qty !== false) $itemsCount += max(0, (int)$qty);
+    }
+
+
     }
 ?>
 
