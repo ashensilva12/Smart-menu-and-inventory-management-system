@@ -289,6 +289,18 @@ try {
     $tempDir = sys_get_temp_dir();
     $pdfFile = tempnam($tempDir, 'bill_') . '.pdf';
     file_put_contents($pdfFile, $dompdf->output());
+
+    // -------- Send email (PHPMailer) --------
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp-relay.brevo.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = '93b60b001@smtp-brevo.com';
+        $mail->Password   = 'U0ES13KZ4mALxV5g';
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
     }
 ?>
 
