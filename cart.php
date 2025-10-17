@@ -129,7 +129,10 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     ]);
     exit;
 }
-
+if (empty($data['cart']) || !is_array($data['cart'])) {
+    echo json_encode(["success" => false, "message" => "Cart is empty or invalid"]);
+    exit;
+}
 
 ?>
 
