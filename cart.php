@@ -190,6 +190,15 @@ try {
       .box {
         border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px; background:#fafafa;
       }
+              .muted { color:#6b7280; }
+      .kv { margin:2px 0; }
+      .kv strong { display:inline-block; width:100px; }
+      .table-wrap { margin-top:16px; }
+      table { width:100%; border-collapse:collapse; }
+      thead th {
+        background:#f3f4f6; font-weight:700; text-transform:uppercase; font-size:11px;
+        border-bottom:1px solid #e5e7eb; padding:8px 8px;
+      }
 
 
             </style>
