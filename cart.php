@@ -218,6 +218,11 @@ try {
           <div class="row total"><div>Total</div><div>Rs.'.number_format($total, 2).'</div></div>
         </div>
       </div>
+            <div class="thanks">🍽️ Thank you for your order! We hope to serve you again soon.</div>
+
+      <div class="footer">
+        The Kings Menu • admin@ashenlakshitha.online
+      </div>
         </body>
         </html>
     }
