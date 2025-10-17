@@ -309,6 +309,13 @@ try {
         $mail->Body    = '<p>Thank you for your order!</p><p>Your bill is attached.</p>';
         $mail->addAttachment($pdfFile, 'OrderBill.pdf');
 
+    $mail->send();
+    } catch (Exception $e) {
+        throw new Exception("Email sending failed: " . $e->getMessage());
+    } finally {
+        if (file_exists($pdfFile)) unlink($pdfFile);
+    }
+
     }
 ?>
 
