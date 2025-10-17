@@ -223,6 +223,13 @@ try {
       <div class="footer">
         The Kings Menu • admin@ashenlakshitha.online
       </div>
+            <!-- dompdf page numbers -->
+      <script type="text/php">
+        if (isset($pdf)) {
+            $font = $fontMetrics->getFont("Helvetica", "normal");
+            $pdf->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 9, array(0,0,0));
+        }
+      </script>
         </body>
         </html>
     }
