@@ -159,5 +159,18 @@ try {
             throw new Exception("Invalid item price or quantity");
         }
         $itemTotal = $itemPrice * $itemQty;
+                $itemsRows .= sprintf(
+            '<tr>
+                <td class="c-name">%s</td>
+                <td class="c-price">Rs.%s</td>
+                <td class="c-qty">%d</td>
+                <td class="c-total">Rs.%s</td>
+             </tr>',
+            $itemName,
+            number_format($itemPrice, 2),
+            $itemQty,
+            number_format($itemTotal, 2)
+        );
+    }
 ?>
 
