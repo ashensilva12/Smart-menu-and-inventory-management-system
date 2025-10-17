@@ -196,7 +196,21 @@ try {
                 <div>admin@ashenlakshitha.online • +94 704865159</div>
                 </div>
             </div>
-            
+            <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="c-name">Item</th>
+              <th class="c-price">Price</th>
+              <th class="c-qty">Qty</th>
+              <th class="c-total">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            '.$itemsRows.'
+          </tbody>
+        </table>
+      </div>
         </body>
         </html>
     }
