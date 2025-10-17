@@ -206,6 +206,10 @@ try {
       .summary {
         margin-top:14px; display:flex; justify-content:flex-end;
       }
+        .totals {
+        width:55%; max-width:320px; border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px;
+        background:#ffffff;
+      }
 
 
             </style>
