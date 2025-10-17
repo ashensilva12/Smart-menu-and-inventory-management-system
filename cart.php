@@ -337,6 +337,16 @@ try {
         log_error("DB connect error: " . $mysqli->connect_error);
     } else {
         $mysqli->set_charset('utf8mb4');
+            $customerName = 'Guest';
+        if ($stmt = $mysqli->prepare("SELECT name FROM customer WHERE email = ? LIMIT 1")) {
+            $stmt->bind_param("s", $customerEmail);
+            if ($stmt->execute()) {
+                $stmt->bind_result($foundName);
+                if ($stmt->fetch() && $foundName) $customerName = $foundName;
+            }
+            $stmt->close();
+        }
+
 
     }
 ?>
