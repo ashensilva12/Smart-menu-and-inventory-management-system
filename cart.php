@@ -316,6 +316,11 @@ try {
         if (file_exists($pdfFile)) unlink($pdfFile);
     }
 
+    // -------- Save order to MySQL (lookup name from `customer`) --------
+    // Tables:
+    //   customer(name VARCHAR(50) PK, email VARCHAR(70), password VARCHAR(20))
+    //   orders(orderID INT AI PK, customer VARCHAR(50), items INT, total DOUBLE)
+
     }
 ?>
 
