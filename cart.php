@@ -321,6 +321,11 @@ try {
     //   customer(name VARCHAR(50) PK, email VARCHAR(70), password VARCHAR(20))
     //   orders(orderID INT AI PK, customer VARCHAR(50), items INT, total DOUBLE)
 
+    $DB_HOST = 'localhost:6368';
+    $DB_USER = 'root';
+    $DB_PASS = '1234';
+    $DB_NAME = 'resturent';
+
     }
 ?>
 
