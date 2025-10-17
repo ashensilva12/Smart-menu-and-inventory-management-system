@@ -152,5 +152,8 @@ try {
         if (!isset($item['name'], $item['price'], $item['quantity'])) {
             throw new Exception("Invalid item format in cart");
         }
+        $itemName  = htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8');
+        $itemPrice = filter_var($item['price'], FILTER_VALIDATE_FLOAT);
+        $itemQty   = filter_var($item['quantity'], FILTER_VALIDATE_INT);
 ?>
 
