@@ -346,7 +346,17 @@ try {
             }
             $stmt->close();
         }
-
+                if ($itemsCount > 0 && $total > 0) {
+            if ($stmt = $mysqli->prepare("INSERT INTO orders (customer, items, total) VALUES (?, ?, ?)")) {
+                $stmt->bind_param("sid", $customerName, $itemsCount, $total);
+                if (!$stmt->execute()) log_error("Insert failed: " . $stmt->error);
+                $stmt->close();
+            } else {
+                log_error("Prepare failed: " . $mysqli->error);
+            }
+        } else {
+            log_error("Skip insert: invalid items/total (items=$itemsCount, total=$total)");
+        }
 
     }
 ?>
