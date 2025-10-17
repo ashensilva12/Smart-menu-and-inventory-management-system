@@ -332,7 +332,11 @@ try {
         $qty = filter_var($it['quantity'], FILTER_VALIDATE_INT);
         if ($qty !== false) $itemsCount += max(0, (int)$qty);
     }
-
+        $mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+    if ($mysqli->connect_errno) {
+        log_error("DB connect error: " . $mysqli->connect_error);
+    } else {
+        $mysqli->set_charset('utf8mb4');
 
     }
 ?>
