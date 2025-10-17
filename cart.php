@@ -133,6 +133,11 @@ if (empty($data['cart']) || !is_array($data['cart'])) {
     echo json_encode(["success" => false, "message" => "Cart is empty or invalid"]);
     exit;
 }
+// Validate totals
+$cart     = $data['cart'];
+$subtotal = filter_var($data['subtotal'] ?? 0, FILTER_VALIDATE_FLOAT);
+$charge   = filter_var($data['charge']   ?? 0, FILTER_VALIDATE_FLOAT);
+$total    = filter_var($data['total']    ?? 0, FILTER_VALIDATE_FLOAT);
 
 ?>
 
