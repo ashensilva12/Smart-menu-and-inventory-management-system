@@ -186,6 +186,11 @@ try {
       .header {
         margin-top:14px; display:flex; justify-content:space-between; align-items:flex-start;
       }
+              .left, .right { width:48%; }
+      .box {
+        border:1px solid #e5e7eb; border-radius:10px; padding:12px 14px; background:#fafafa;
+      }
+
 
             </style>
             <meta charset="UTF-8">
