@@ -181,6 +181,11 @@ try {
             .brand-bar {
             background:#111827; color:#fff; padding:14px 16px; border-radius:10px;
             }
+                  .brand-title { font-size:18px; letter-spacing:0.3px; font-weight:bold; }
+      .brand-sub { font-size:11px; opacity:.9; margin-top:2px; }
+      .header {
+        margin-top:14px; display:flex; justify-content:space-between; align-items:flex-start;
+      }
 
             </style>
             <meta charset="UTF-8">
