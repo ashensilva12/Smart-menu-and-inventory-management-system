@@ -155,5 +155,9 @@ try {
         $itemName  = htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8');
         $itemPrice = filter_var($item['price'], FILTER_VALIDATE_FLOAT);
         $itemQty   = filter_var($item['quantity'], FILTER_VALIDATE_INT);
+                if ($itemPrice === false || $itemQty === false) {
+            throw new Exception("Invalid item price or quantity");
+        }
+        $itemTotal = $itemPrice * $itemQty;
 ?>
 
