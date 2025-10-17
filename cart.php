@@ -142,5 +142,10 @@ if ($subtotal === false || $charge === false || $total === false) {
     echo json_encode(["success" => false, "message" => "Invalid numeric values"]);
     exit;
 }
+try {
+    // -------- Build bill HTML (beautiful invoice) --------
+    date_default_timezone_set('Asia/Colombo');
+    $invoiceNo  = 'INV-' . date('Ymd-His');
+    $orderDate  = date('F j, Y g:i A');
 ?>
 
