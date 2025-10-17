@@ -285,6 +285,10 @@ try {
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
+
+    $tempDir = sys_get_temp_dir();
+    $pdfFile = tempnam($tempDir, 'bill_') . '.pdf';
+    file_put_contents($pdfFile, $dompdf->output());
     }
 ?>
 
