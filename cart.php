@@ -189,6 +189,14 @@ try {
                 <div class="kv"><strong>Date:</strong> '.$orderDate.'</div>
                 <div class="kv"><strong>Customer:</strong> '.htmlspecialchars($customerEmail, ENT_QUOTES, "UTF-8").'</div>
             </div>
+            <div class="right box">
+                <div class="muted" style="margin-bottom:6px;">Billed By</div>
+                <div><strong>The Kings Menu Pvt Ltd</strong></div>
+                <div>No.194 Wadduwa, Kaluthara</div>
+                <div>admin@ashenlakshitha.online • +94 704865159</div>
+                </div>
+            </div>
+            
         </body>
         </html>
     }
