@@ -147,5 +147,10 @@ try {
     date_default_timezone_set('Asia/Colombo');
     $invoiceNo  = 'INV-' . date('Ymd-His');
     $orderDate  = date('F j, Y g:i A');
+    $itemsRows = '';
+    foreach ($cart as $item) {
+        if (!isset($item['name'], $item['price'], $item['quantity'])) {
+            throw new Exception("Invalid item format in cart");
+        }
 ?>
 
