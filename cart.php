@@ -138,6 +138,9 @@ $cart     = $data['cart'];
 $subtotal = filter_var($data['subtotal'] ?? 0, FILTER_VALIDATE_FLOAT);
 $charge   = filter_var($data['charge']   ?? 0, FILTER_VALIDATE_FLOAT);
 $total    = filter_var($data['total']    ?? 0, FILTER_VALIDATE_FLOAT);
-
+if ($subtotal === false || $charge === false || $total === false) {
+    echo json_encode(["success" => false, "message" => "Invalid numeric values"]);
+    exit;
+}
 ?>
 
