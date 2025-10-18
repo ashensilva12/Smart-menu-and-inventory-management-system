@@ -104,3 +104,11 @@ button {
     text-align: center;
     text-decoration: none;
 }
+/* Primary button styling */
+.btnprimary {
+    background-color: #d62828; /* bold red color for destructive action */
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 800px;
+    margin-bottom: 10px;
+}
