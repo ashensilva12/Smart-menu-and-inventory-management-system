@@ -72,6 +72,10 @@
             .then(data => {
                 document.querySelector('#ordersTable tbody').innerHTML = data;
             })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.querySelector('#ordersTable tbody').innerHTML = '<tr><td colspan="4">Failed to load data</td></tr>';
+        });
 
 </body>
 </html>
