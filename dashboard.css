@@ -78,3 +78,6 @@ button {
     display: flex;
     list-style: none;
 }
+.admin-header nav ul li {
+    margin-left: 20px;
+}
