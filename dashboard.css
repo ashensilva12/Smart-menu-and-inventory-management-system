@@ -159,3 +159,10 @@ button {
 .admin-nav ul {
     list-style: none;
 }
+.admin-nav ul li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--gray);
+    transition: all 0.3s;
+}
