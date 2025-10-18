@@ -156,3 +156,6 @@ button {
     color: var(--gray);
     font-size: 0.9rem;
 }
+.admin-nav ul {
+    list-style: none;
+}
