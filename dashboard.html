@@ -79,6 +79,12 @@
         document.getElementById('submitBtn').addEventListener('click', function () {
         if (confirm("Are you sure you want to clear all previous orders?")) {
             fetch('dashboard.php?clear=1')
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // optional confirmation message
+                    // Reload the table after clearing
+                    return fetch('dashboard.php');
+                })
 
 </body>
 </html>
