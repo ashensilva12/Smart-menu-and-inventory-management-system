@@ -175,3 +175,7 @@ button {
     color: var(--primary);
     border-left: 3px solid var(--primary);
 }
+.admin-nav ul li a span {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
