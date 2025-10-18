@@ -85,3 +85,6 @@ button {
     font-weight: 500;
     transition: color 0.3s;
 }
+.admin-header nav ul li a:hover {
+    color: var(--secondary);
+}
