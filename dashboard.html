@@ -85,6 +85,15 @@
                     // Reload the table after clearing
                     return fetch('dashboard.php');
                 })
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector('#ordersTable tbody').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error clearing orders:', error);
+                    alert("Failed to clear orders.");
+                });
+
 
 </body>
 </html>
