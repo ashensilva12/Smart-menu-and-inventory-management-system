@@ -134,3 +134,9 @@ button {
     overflow-y: auto;
     padding: 20px 0;
 }
+.admin-profile {
+    text-align: center;
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
