@@ -88,3 +88,6 @@ button {
 .admin-header nav ul li a:hover {
     color: var(--secondary);
 }
+#logout-btn {
+    color: var(--danger);
+}
