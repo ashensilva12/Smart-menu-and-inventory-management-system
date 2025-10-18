@@ -179,3 +179,10 @@ button {
     margin-right: 10px;
     font-size: 1.1rem;
 }
+/* Main Content Styles */
+.admin-main {
+    margin-left: 250px;
+    margin-top: 60px;
+    padding: 20px;
+    min-height: calc(100vh - 60px);
+}
