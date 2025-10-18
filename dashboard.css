@@ -112,3 +112,12 @@ button {
     margin-left: 800px;
     margin-bottom: 10px;
 }
+.btnprimary:hover {
+    background-color: #bb1e1e;
+    transform: scale(1.03);
+}
+.btnprimary:active {
+    background-color: #a11616;
+    transform: scale(0.98);
+    box-shadow: none;
+}
