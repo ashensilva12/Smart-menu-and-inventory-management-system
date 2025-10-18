@@ -121,3 +121,16 @@ button {
     transform: scale(0.98);
     box-shadow: none;
 }
+/* Sidebar Styles */
+.admin-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 90;
+    overflow-y: auto;
+    padding: 20px 0;
+}
