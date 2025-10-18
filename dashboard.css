@@ -62,3 +62,6 @@ button {
     font-weight: 700;
     color: var(--primary);
 }
+.logo span {
+    color: var(--secondary);
+}
