@@ -170,3 +170,8 @@ button {
     background-color: rgba(78, 205, 196, 0.1);
     color: var(--primary);
 }
+.admin-nav ul li a.active {
+    background-color: rgba(78, 205, 196, 0.2);
+    color: var(--primary);
+    border-left: 3px solid var(--primary);
+}
