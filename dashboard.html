@@ -76,6 +76,9 @@
                 console.error('Error loading data:', error);
                 document.querySelector('#ordersTable tbody').innerHTML = '<tr><td colspan="4">Failed to load data</td></tr>';
         });
+        document.getElementById('submitBtn').addEventListener('click', function () {
+        if (confirm("Are you sure you want to clear all previous orders?")) {
+            fetch('dashboard.php?clear=1')
 
 </body>
 </html>
