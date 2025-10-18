@@ -81,3 +81,7 @@ button {
 .admin-header nav ul li {
     margin-left: 20px;
 }
+.admin-header nav ul li a {
+    font-weight: 500;
+    transition: color 0.3s;
+}
