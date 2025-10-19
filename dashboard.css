@@ -204,3 +204,10 @@ button {
 .section-header p {
     color: var(--gray);
 }
+/* Dashboard Grid */
+.dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: center;
+}
