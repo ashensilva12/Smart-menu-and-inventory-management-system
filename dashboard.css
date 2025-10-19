@@ -260,3 +260,7 @@ button {
     background-color: rgba(42, 157, 143, 0.2);
     color: var(--success);
 }
+.status.preparing {
+    background-color: rgba(233, 196, 106, 0.2);
+    color: var(--warning);
+}
