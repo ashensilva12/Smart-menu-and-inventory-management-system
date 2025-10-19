@@ -227,3 +227,7 @@ button {
     color: var(--primary);
     font-size: 1.2rem;
 }
+.chart-container {
+    height: 250px;
+    position: relative;
+}
