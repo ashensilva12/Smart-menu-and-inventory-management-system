@@ -186,3 +186,7 @@ button {
     padding: 20px;
     min-height: calc(100vh - 60px);
 }
+.admin-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
