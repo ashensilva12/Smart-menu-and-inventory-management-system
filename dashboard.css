@@ -211,3 +211,8 @@ button {
     margin-bottom: 30px;
     align-items: center;
 }
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
