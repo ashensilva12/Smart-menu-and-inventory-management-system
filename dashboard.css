@@ -222,3 +222,8 @@ button {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     padding: 20px;
 }
+.chart-card h3, .recent-orders h3 {
+    margin-bottom: 15px;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
