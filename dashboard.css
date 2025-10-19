@@ -246,3 +246,6 @@ button {
     color: var(--gray);
     font-weight: 600;
 }
+.orders-table tr:hover {
+    background-color: #f8f9fa;
+}
