@@ -231,3 +231,8 @@ button {
     height: 250px;
     position: relative;
 }
+/* Table Styles */
+.orders-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
