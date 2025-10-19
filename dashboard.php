@@ -24,7 +24,12 @@
                 <td>{$row['total']}</td>
             </tr>";
             }
-        } 
+        } else {
+        echo "<tr><td colspan='4'>No orders found.</td></tr>";
+    }
+
+
+    $con->close();
 
     }
 ?>
