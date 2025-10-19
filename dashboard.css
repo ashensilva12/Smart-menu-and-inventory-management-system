@@ -190,3 +190,6 @@ button {
     display: none;
     animation: fadeIn 0.5s ease;
 }
+.admin-section.active {
+    display: block;
+}
