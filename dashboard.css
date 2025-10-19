@@ -241,3 +241,8 @@ button {
     text-align: left;
     border-bottom: 1px solid #eee;
 }
+.orders-table th {
+    background-color: #f8f9fa;
+    color: var(--gray);
+    font-weight: 600;
+}
