@@ -8,5 +8,10 @@
             $clean=$con->query($data);
             echo "<script>window.location.href = 'dashboard.html';</script>";
         }
+        
+        else{
+            echo "<script>alert('No any orders available');window.location.href = 'dashboard.html';</script>";
+        }
+
     }
 ?>
