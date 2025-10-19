@@ -11,6 +11,7 @@
         
         else{
             echo "<script>alert('No any orders available');window.location.href = 'dashboard.html';</script>";
+            exit();
         }
 
     }
