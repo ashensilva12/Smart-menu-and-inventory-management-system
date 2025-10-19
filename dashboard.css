@@ -201,3 +201,6 @@ button {
     color: var(--primary);
     margin-bottom: 5px;
 }
+.section-header p {
+    color: var(--gray);
+}
