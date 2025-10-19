@@ -193,3 +193,6 @@ button {
 .admin-section.active {
     display: block;
 }
+.section-header {
+    margin-bottom: 30px;
+}
