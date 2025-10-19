@@ -13,6 +13,8 @@
             echo "<script>alert('No any orders available');window.location.href = 'dashboard.html';</script>";
             exit();
         }
+        $sql = "SELECT * FROM orders";
+        $result = $con->query($sql);
 
     }
 ?>
