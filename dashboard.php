@@ -4,6 +4,9 @@
     $data="TRUNCATE TABLE orders";
 
     if(isset($_GET['clear'])){
-        
+        if($clean=$con->query($data)==true){
+            $clean=$con->query($data);
+            echo "<script>window.location.href = 'dashboard.html';</script>";
+        }
     }
 ?>
