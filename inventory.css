@@ -66,3 +66,9 @@ body {
     background-color: #b92330;
     transform: translateY(-1px);
 }
+.inventory-actions {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
