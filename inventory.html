@@ -79,6 +79,9 @@
         .then(html => {
             document.querySelector('#inventoryTable tbody').innerHTML = html;
         })
+                .catch(() => {
+            document.querySelector('#inventoryTable tbody').innerHTML = '<tr><td colspan="6">Failed to load data</td></tr>';
+        });
     }
 </script>
 </body>
