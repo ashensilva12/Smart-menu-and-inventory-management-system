@@ -75,6 +75,10 @@
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: data
         })
+        .then(res => res.text())
+        .then(html => {
+            document.querySelector('#inventoryTable tbody').innerHTML = html;
+        })
     }
 </script>
 </body>
