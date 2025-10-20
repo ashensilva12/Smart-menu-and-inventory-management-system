@@ -68,6 +68,8 @@
         const stock = document.getElementById('stock-filter').value;
         const category = document.getElementById('category-filter').value;
         const search = document.getElementById('search-bar').value;
+
+        const data = `checkstock=${encodeURIComponent(stock)}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
     }
 </script>
 </body>
