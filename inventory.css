@@ -58,3 +58,7 @@ body {
     background-color: var(--secondary-hover);
     transform: translateY(-1px);
 }
+.btn-back {
+    background-color: var(--danger-color);
+    color: white;
+}
