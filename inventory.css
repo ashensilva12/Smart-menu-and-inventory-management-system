@@ -25,3 +25,8 @@ body {
     box-shadow: var(--shadow);
     padding: 25px;
 }
+.section-header h2 {
+    color: #2a3f54;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
