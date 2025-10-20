@@ -83,6 +83,10 @@
             document.querySelector('#inventoryTable tbody').innerHTML = '<tr><td colspan="6">Failed to load data</td></tr>';
         });
     }
+    window.onload = loadFilteredData;
+    document.getElementById('stock-filter').onchange = loadFilteredData;
+    document.getElementById('category-filter').onchange = loadFilteredData;
+    document.getElementById('search-bar').oninput = loadFilteredData;
 </script>
 </body>
 </html>
