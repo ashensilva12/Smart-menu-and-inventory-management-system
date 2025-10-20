@@ -46,3 +46,7 @@ body {
     background-color: var(--primary-color);
     color: white;
 }
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
