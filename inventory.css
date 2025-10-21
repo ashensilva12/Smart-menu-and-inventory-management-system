@@ -97,3 +97,9 @@ body {
     font-size: 14px;
     min-width: 180px;
 }
+/* ===== Search Bar ===== */
+.search-bar-container {
+    margin-left: auto;
+    flex-grow: 1;
+    max-width: 400px;
+}
