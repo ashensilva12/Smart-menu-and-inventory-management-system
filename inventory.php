@@ -14,4 +14,27 @@
         $current = floatval($row['currentStock']);
         $unit = strtolower(trim($row['unit']));
 
+        // Define low stock thresholds per unit
+        switch ($unit) {
+            case 'g':
+                $lowThreshold = 500;
+                break;
+            case 'kg':
+                $lowThreshold = 10;
+                break;
+            case 'ml':
+                $lowThreshold = 500;
+                break;
+            case 'l':
+                $lowThreshold = 10;
+                break;
+            case 'pieces':
+                $lowThreshold = 20;
+                break;
+            case 'bottles':
+                $lowThreshold = 10;
+                break;
+            default:
+                $lowThreshold = 10; // fallback
+        }
 ?>
