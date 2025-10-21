@@ -89,4 +89,6 @@ if (!empty($where)) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
 
+$result = $con->query($sql);
+
 ?>
