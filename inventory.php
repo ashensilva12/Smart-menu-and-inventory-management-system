@@ -60,4 +60,10 @@
 $checkstock = $_POST['checkstock'] ?? 'all';
 $category = $_POST['category'] ?? 'all';
 $search = $_POST['search'] ?? '';
+
+$statusMap = [
+    'low-stock' => 'Low Stock',
+    'in-stock' => 'In Stock',
+    'out-of-stock' => 'Out Of Stock'
+];
 ?>
