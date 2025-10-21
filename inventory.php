@@ -4,6 +4,7 @@
     // Check DB connection
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
+    }
     
     // Step 1: Update item status based on current stock and unit
     $currstock = "SELECT currentStock, itemID, unit FROM invitems";
@@ -55,4 +56,8 @@
         }
     }
 }
+// Step 2: Handle filters
+$checkstock = $_POST['checkstock'] ?? 'all';
+$category = $_POST['category'] ?? 'all';
+$search = $_POST['search'] ?? '';
 ?>
