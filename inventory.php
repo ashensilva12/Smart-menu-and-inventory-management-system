@@ -66,4 +66,11 @@ $statusMap = [
     'in-stock' => 'In Stock',
     'out-of-stock' => 'Out Of Stock'
 ];
+
+$where = [];
+
+if (isset($statusMap[$checkstock])) {
+    $mappedStatus = $con->real_escape_string($statusMap[$checkstock]);
+    $where[] = "status = '$mappedStatus'";
+}
 ?>
