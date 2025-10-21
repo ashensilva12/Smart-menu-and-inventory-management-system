@@ -133,3 +133,11 @@ th, td {
     text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2a3f54;
+    position: sticky;
+    top: 0;
+}
+
