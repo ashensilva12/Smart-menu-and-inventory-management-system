@@ -91,4 +91,18 @@ if (!empty($where)) {
 
 $result = $con->query($sql);
 
+// Step 4: Output HTML table rows
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $statusClass = strtolower(str_replace(' ', '-', $row['status']));
+        echo "<tr class='{$statusClass}'>
+            <td>{$row['itemID']}</td>
+            <td>{$row['itemName']}</td>
+            <td>{$row['category']}</td>
+            <td>{$row['currentStock']}</td>
+            <td>{$row['unit']}</td>
+            <td>{$row['status']}</td>
+        </tr>";
+    }
+}
 ?>
