@@ -117,3 +117,10 @@ body {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
 }
+/* ===== Table ===== */
+.inventory-table {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
