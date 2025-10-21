@@ -104,5 +104,9 @@ if ($result && $result->num_rows > 0) {
             <td>{$row['status']}</td>
         </tr>";
     }
+} else {
+    echo "<tr><td colspan='6'>No items found.</td></tr>";
 }
+
+$con->close();
 ?>
