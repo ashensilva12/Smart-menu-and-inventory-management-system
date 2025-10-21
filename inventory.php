@@ -83,4 +83,10 @@ if (!empty($search)) {
     $where[] = "itemName LIKE '%$safeSearch%'";
 }
 
+// Step 3: Build SQL query
+$sql = "SELECT * FROM invitems";
+if (!empty($where)) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
 ?>
