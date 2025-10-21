@@ -45,4 +45,14 @@
         } else {
             $status = "In Stock";
         }
+                // Update status only if changed
+        $existing = $con->query("SELECT status FROM invitems WHERE itemID='$id'");
+        if ($existing && $existing->num_rows > 0) {
+            $oldStatus = $existing->fetch_assoc()['status'];
+            if ($oldStatus !== $status) {
+                $con->query("UPDATE invitems SET status='$status' WHERE itemID='$id'");
+            }
+        }
+    }
+}
 ?>
