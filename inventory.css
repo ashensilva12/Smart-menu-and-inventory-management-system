@@ -85,3 +85,7 @@ body {
     align-items: center;
     gap: 10px;
 }
+.filter-group label {
+    font-size: 14px;
+    font-weight: 500;
+}
