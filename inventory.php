@@ -73,4 +73,10 @@ if (isset($statusMap[$checkstock])) {
     $mappedStatus = $con->real_escape_string($statusMap[$checkstock]);
     $where[] = "status = '$mappedStatus'";
 }
+
+if ($category !== 'all') {
+    $safeCategory = ucfirst(strtolower($con->real_escape_string($category)));
+    $where[] = "category = '$safeCategory'";
+}
+
 ?>
