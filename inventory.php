@@ -78,5 +78,9 @@ if ($category !== 'all') {
     $safeCategory = ucfirst(strtolower($con->real_escape_string($category)));
     $where[] = "category = '$safeCategory'";
 }
+if (!empty($search)) {
+    $safeSearch = $con->real_escape_string($search);
+    $where[] = "itemName LIKE '%$safeSearch%'";
+}
 
 ?>
