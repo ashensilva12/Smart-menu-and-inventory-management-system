@@ -4,5 +4,9 @@
     // Check DB connection
     if ($con->connect_error) {
         die("Connection failed: " . $con->connect_error);
+    
+    // Step 1: Update item status based on current stock and unit
+    $currstock = "SELECT currentStock, itemID, unit FROM invitems";
+    $stock = $con->query($currstock);
 }
 ?>
