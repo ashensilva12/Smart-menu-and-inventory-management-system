@@ -140,4 +140,6 @@ th {
     position: sticky;
     top: 0;
 }
-
+tr:hover {
+    background-color: rgba(42, 157, 143, 0.03);
+}
