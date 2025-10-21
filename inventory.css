@@ -128,3 +128,8 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
