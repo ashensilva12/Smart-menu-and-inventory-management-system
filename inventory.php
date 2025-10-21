@@ -37,4 +37,12 @@
             default:
                 $lowThreshold = 10; // fallback
         }
+                // Determine status
+        if ($current <= 0) {
+            $status = "Out Of Stock";
+        } elseif ($current < $lowThreshold) {
+            $status = "Low Stock";
+        } else {
+            $status = "In Stock";
+        }
 ?>
