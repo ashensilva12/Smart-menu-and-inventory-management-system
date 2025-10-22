@@ -159,3 +159,11 @@ body {
     background-color: #b92330;
     transform: translateY(-1px);
 }
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
