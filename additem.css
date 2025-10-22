@@ -147,3 +147,7 @@ body {
     background-color: var(--secondary-color);
     color: white;
 }
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+    transform: translateY(-1px);
+}
