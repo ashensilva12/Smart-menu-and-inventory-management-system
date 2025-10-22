@@ -46,3 +46,10 @@ body {
 .modal-content {
     padding: 0;
 }
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+    border-bottom: 1px solid var(--border-color);
+}
