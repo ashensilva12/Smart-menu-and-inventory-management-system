@@ -167,3 +167,7 @@ body {
     padding-top: 15px;
     border-top: 1px solid var(--border-color);
 }
+/* ===== Input Validation Styles ===== */
+input:invalid, select:invalid {
+    border-color: #ffcccc;
+}
