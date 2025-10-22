@@ -171,3 +171,6 @@ body {
 input:invalid, select:invalid {
     border-color: #ffcccc;
 }
+input:valid, select:valid {
+    border-color: #ccffcc;
+}
