@@ -155,3 +155,7 @@ body {
     background-color: var(--danger-color);
     color: white;
 }
+.btn-back:hover{
+    background-color: #b92330;
+    transform: translateY(-1px);
+}
