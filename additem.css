@@ -114,3 +114,7 @@ body {
     resize: vertical;
     min-height: 80px;
 }
+.form-row {
+    display: flex;
+    gap: 15px;
+}
