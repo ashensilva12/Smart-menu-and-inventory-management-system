@@ -47,4 +47,16 @@ if ($sql && $sql->num_rows == 1) {
             window.location.href = 'additem.html';
           });
         </script>";
+        } else {
+        echo "
+        <script>
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Failed to update item.',
+            confirmButtonText: 'Back'
+          }).then(() => {
+            window.location.href = 'additem.html';
+          });
+        </script>";
 ?>
