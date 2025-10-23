@@ -87,4 +87,6 @@ if ($sql && $sql->num_rows == 1) {
         </script>";
     }
 }
+echo "</body></html>";
+$con->close();
 ?>
