@@ -14,4 +14,7 @@ $cri5 = $unit != "";
 if (!$cri1 || !$cri2 || !$cri3 || !$cri4 || !$cri5) exit();
 
 $con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+
+$data = "INSERT INTO invitems(itemID, itemName, category, currentStock, unit, status) 
+         VALUES('$itemID', '$itemname', '$category', '$stock', '$unit', 'in-stock')";
 ?>
