@@ -59,4 +59,19 @@ if ($sql && $sql->num_rows == 1) {
             window.location.href = 'additem.html';
           });
         </script>";
+            }
+} else {
+    if ($con->query($data) === true) {
+        echo "
+        <script>
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Item Added Successfully',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            window.location.href = 'additem.html';
+          });
+        </script>";
+    } else 
 ?>
