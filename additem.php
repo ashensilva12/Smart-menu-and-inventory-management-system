@@ -17,4 +17,7 @@ $con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
 
 $data = "INSERT INTO invitems(itemID, itemName, category, currentStock, unit, status) 
          VALUES('$itemID', '$itemname', '$category', '$stock', '$unit', 'in-stock')";
+
+$check = "SELECT * FROM invitems WHERE category='$category' AND itemID='$itemID'";
+$sql = $con->query($check);
 ?>
