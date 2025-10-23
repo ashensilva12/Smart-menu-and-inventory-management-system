@@ -30,4 +30,9 @@ echo "<!DOCTYPE html>
   <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 </head>
 <body>";
+if ($sql && $sql->num_rows == 1) {
+    $row = $sql->fetch_assoc();
+    $currentStock = (int)$row['currentStock'];
+    $newStock = $currentStock + $stock;
+    $update = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
 ?>
