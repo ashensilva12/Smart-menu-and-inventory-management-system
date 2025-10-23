@@ -20,4 +20,14 @@ $data = "INSERT INTO invitems(itemID, itemName, category, currentStock, unit, st
 
 $check = "SELECT * FROM invitems WHERE category='$category' AND itemID='$itemID'";
 $sql = $con->query($check);
+
+// Output full HTML for SweetAlert to work:
+echo "<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>Processing...</title>
+  <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+</head>
+<body>";
 ?>
