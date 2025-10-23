@@ -35,4 +35,16 @@ if ($sql && $sql->num_rows == 1) {
     $currentStock = (int)$row['currentStock'];
     $newStock = $currentStock + $stock;
     $update = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
+    if ($con->query($update) === true) {
+        echo "
+        <script>
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Item Updated Successfully',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            window.location.href = 'additem.html';
+          });
+        </script>";
 ?>
