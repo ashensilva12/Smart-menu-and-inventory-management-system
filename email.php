@@ -15,5 +15,9 @@
         $mail->Password = 'U0ES13KZ4mALxV5g'; // App password, not your Gmail password
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
+
+        // Recipients
+        $mail->setFrom('admin@ashenlakshitha.online', 'Your Restaurant');
+        $mail->addAddress('ashenlakshitha12@gmail.com'); // User's email
     }
 ?>
