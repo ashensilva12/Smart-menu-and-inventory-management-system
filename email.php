@@ -24,5 +24,7 @@
         $mail->isHTML(true);
         $mail->Subject = 'Your Order Confirmation';
         $mail->Body    = 'Hello, thank you for your order!<br>We are preparing it right now.';
+
+        
     }
 ?>
