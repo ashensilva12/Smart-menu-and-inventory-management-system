@@ -28,5 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($imageFileType, $allowedTypes)) {
         die("Sorry, only JPG, JPEG, PNG files are allowed.");
     }
+        // Move uploaded file
+    if (move_uploaded_file($imageFile['tmp_name'], $targetFilePath)) {
+        // Insert item into DB
+        $sql = "INSERT INTO menu (item_name, item_price, item_description, item_category, item_image) 
+                VALUES ('$name', $price, '$description', '$category', '$targetFilePath')";
+        
+        if ($con->query($sql)) {
+            header("Location: menu.html");
+            exit();
+        } else {
+            echo "Error inserting into database: " . $con->error;
+        }
+    } else {
+        echo "Sorry, there was an error uploading your image.";
+    }
 }
 ?>
