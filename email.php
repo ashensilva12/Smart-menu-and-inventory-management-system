@@ -19,5 +19,10 @@
         // Recipients
         $mail->setFrom('admin@ashenlakshitha.online', 'Your Restaurant');
         $mail->addAddress('ashenlakshitha12@gmail.com'); // User's email
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Your Order Confirmation';
+        $mail->Body    = 'Hello, thank you for your order!<br>We are preparing it right now.';
     }
 ?>
