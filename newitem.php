@@ -22,5 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageName = basename($imageFile['name']);
     $targetFilePath = $targetDir . time() . '_' . $imageName;
     $imageFileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+    // Validate image file type
+    $allowedTypes = ['jpg', 'jpeg', 'png'];
+    if (!in_array($imageFileType, $allowedTypes)) {
+        die("Sorry, only JPG, JPEG, PNG files are allowed.");
+    }
 }
 ?>
