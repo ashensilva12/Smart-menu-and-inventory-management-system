@@ -18,5 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_dir($targetDir)) {
         mkdir($targetDir, 0755, true);
     }
+    $imageFile = $_FILES['item_image'];
+    $imageName = basename($imageFile['name']);
+    $targetFilePath = $targetDir . time() . '_' . $imageName;
+    $imageFileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 }
 ?>
