@@ -10,5 +10,6 @@
         // Server settings
         $mail->isSMTP();
         $mail->Host = 'smtp-relay.brevo.com'; // Gmail SMTP server
+        $mail->SMTPAuth = true;
     }
 ?>
