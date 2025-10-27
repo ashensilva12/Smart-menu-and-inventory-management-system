@@ -12,5 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['item_price']);
     $description = $con->real_escape_string($_POST['item_description']);
     $category = $con->real_escape_string($_POST['item_category']);
+
+    // Handle image upload
+    $targetDir = "uploads/";
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
 }
 ?>
