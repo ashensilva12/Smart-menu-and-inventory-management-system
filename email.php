@@ -11,5 +11,6 @@
         $mail->isSMTP();
         $mail->Host = 'smtp-relay.brevo.com'; // Gmail SMTP server
         $mail->SMTPAuth = true;
+        $mail->Username = '93b60b001@smtp-brevo.com'; // Your Gmail
     }
 ?>
