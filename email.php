@@ -5,4 +5,8 @@
     require 'vendor/autoload.php';
 
     $mail = new PHPMailer(true);
+
+    try {
+        
+    }
 ?>
