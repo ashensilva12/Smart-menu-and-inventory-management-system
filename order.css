@@ -58,3 +58,13 @@ body {
     color: #2a3f54;
     font-size: 20px;
 }
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: var(--transition);
+    line-height: 1;
+    padding: 5px;
+}
