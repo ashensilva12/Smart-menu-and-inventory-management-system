@@ -72,3 +72,6 @@ body {
     color: var(--danger-color);
     transform: scale(1.1);
 }
+.modal-body {
+    padding: 25px;
+}
