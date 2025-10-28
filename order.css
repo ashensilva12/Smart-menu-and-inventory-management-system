@@ -1,0 +1,15 @@
+/* ===== Base Styles ===== */
+:root {
+    --primary-color: #2a9d8f;
+    --primary-hover: #21867a;
+    --secondary-color: #6c757d;
+    --secondary-hover: #5a6268;
+    --danger-color: #e63946;
+    --warning-color: #e9c46a;
+    --success-color: #2a9d8f;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+    --border-color: #ddd;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --transition: all 0.2s ease;
+}
