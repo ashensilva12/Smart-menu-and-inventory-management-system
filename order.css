@@ -75,3 +75,9 @@ body {
 .modal-body {
     padding: 25px;
 }
+/* ===== Form Styles ===== */
+#add-inventory-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
