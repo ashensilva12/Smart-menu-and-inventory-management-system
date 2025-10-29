@@ -197,4 +197,13 @@ input:valid, select:valid {
         padding: 10px 16px;
     }
 }
+@media (max-width: 400px) {
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
 
