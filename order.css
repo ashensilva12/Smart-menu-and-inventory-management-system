@@ -174,4 +174,27 @@ input:invalid, select:invalid {
 input:valid, select:valid {
     border-color: #ccffcc;
 }
+/* ===== Responsive Design ===== */
+@media (max-width: 600px) {
+    .modal {
+        margin: 0 15px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .modal-header {
+        padding: 15px 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+    }
+}
 
