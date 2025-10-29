@@ -135,3 +135,7 @@ body {
     transition: var(--transition);
     font-size: 14px;
 }
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
