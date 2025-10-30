@@ -27,6 +27,18 @@
     if ($result && $result->num_rows == 1) {
     $row = $result->fetch_assoc(); 
     $currentStock = (int)$row['currentStock'];
+        if ($stock > $currentStock) {
+        echo "
+        <script>
+          Swal.fire({
+            icon: 'warning',
+            title: 'Not Enough Stock',
+            text: 'Item not enough to get. Please add this item first',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            window.location.href = 'updateitem.html';
+          });
+        </script>";
 echo "</body></html>";
 $con->close();
 ?>
