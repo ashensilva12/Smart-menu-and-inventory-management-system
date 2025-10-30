@@ -12,4 +12,7 @@
   if (!$cri1 || !$cri2 || !$cri3 || !$cri4) exit();
 
   $con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+
+  $data = "SELECT currentStock FROM invitems WHERE itemID='$itemID'";
+  $result = $con->query($data);
 ?>
