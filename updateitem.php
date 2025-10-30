@@ -16,15 +16,15 @@
   $data = "SELECT currentStock FROM invitems WHERE itemID='$itemID'";
   $result = $con->query($data);
 
-  echo "<!DOCTYPE html>
+  echo '<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
-<body>";
+<body>';
     if ($result && $result->num_rows == 1) {
     $row = $result->fetch_assoc(); 
     $currentStock = (int)$row['currentStock'];
