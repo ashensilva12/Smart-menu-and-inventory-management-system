@@ -68,7 +68,19 @@
             </script>";
         }
     }
-} 
+}  else {
+    echo "
+    <script>
+      Swal.fire({
+        icon: 'error',
+        title: 'Item Not Found',
+        text: 'Can’t find this item. Please add it first.',
+        confirmButtonText: 'Add Item'
+      }).then(() => {
+        window.location.href = 'additem.html';
+      });
+    </script>";
+}
 echo "</body></html>";
 $con->close();
 ?>
