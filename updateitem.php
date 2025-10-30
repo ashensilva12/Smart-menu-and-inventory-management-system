@@ -42,6 +42,19 @@
         } else {
         $newStock = $currentStock - $stock;
         $check = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
+        if ($con->query($check) === true) {
+            echo "
+            <script>
+              Swal.fire({
+                icon: 'success',
+                title: 'Item Updated',
+                text: 'Stock updated successfully.',
+                confirmButtonText: 'OK'
+              }).then(() => {
+                window.location.href = 'updateitem.html';
+              });
+            </script>";
+        } 
 echo "</body></html>";
 $con->close();
 ?>
