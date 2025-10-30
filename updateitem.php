@@ -39,6 +39,9 @@
             window.location.href = 'updateitem.html';
           });
         </script>";
+        } else {
+        $newStock = $currentStock - $stock;
+        $check = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
 echo "</body></html>";
 $con->close();
 ?>
