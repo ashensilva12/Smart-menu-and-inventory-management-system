@@ -54,7 +54,21 @@
                 window.location.href = 'updateitem.html';
               });
             </script>";
-        } 
+        }else {
+            echo "
+            <script>
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong, please try again.',
+                confirmButtonText: 'Retry'
+              }).then(() => {
+                window.location.href = 'updateitem.html';
+              });
+            </script>";
+        }
+    }
+} 
 echo "</body></html>";
 $con->close();
 ?>
