@@ -8,4 +8,6 @@
   $cri2 = $itemname != "";
   $cri3 = $category != "";
   $cri4 = $stock != "";
+
+  if (!$cri1 || !$cri2 || !$cri3 || !$cri4) exit();
 ?>
