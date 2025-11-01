@@ -30,7 +30,13 @@
         <p>&copy; 2020-2025 The Kings Menu Pvt Ltd</p>
     </footer>
     <script>
-        
+        function loadMenuItems() {
+            fetch('menu.php')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('menu-items').innerHTML = html;
+                    addDeleteButtons();
+                })
     </script>
 </body>
 </html>
