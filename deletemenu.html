@@ -42,6 +42,10 @@
                     console.error(err);
                 });
         }
+        function addDeleteButtons() {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                if (item.querySelector('.delete-btn')) return;
     </script>
 </body>
 </html>
