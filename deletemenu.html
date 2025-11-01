@@ -52,6 +52,13 @@
                 const id = item.getAttribute('data-id');
 
                 const imgContainer = item.querySelector('.menu-item-img');
+                if (imgContainer) {
+                    imgContainer.style.position = 'relative';
+                    imgContainer.appendChild(deleteBtn);
+                } else {
+                    item.appendChild(deleteBtn);
+                }
+
     </script>
 </body>
 </html>
