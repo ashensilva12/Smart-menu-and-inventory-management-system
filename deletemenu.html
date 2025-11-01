@@ -69,7 +69,11 @@
                         confirmButtonText: 'Yes, delete it!',
                         cancelButtonText: 'Cancel',
                         reverseButtons: true
-                    })
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('deletemenu.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 
     </script>
 </body>
