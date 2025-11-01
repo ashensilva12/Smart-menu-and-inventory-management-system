@@ -46,6 +46,9 @@
             const items = document.querySelectorAll('.menu-item');
             items.forEach(item => {
                 if (item.querySelector('.delete-btn')) return;
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = "−";
+                deleteBtn.className = 'delete-btn';
     </script>
 </body>
 </html>
