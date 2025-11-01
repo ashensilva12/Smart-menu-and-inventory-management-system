@@ -75,6 +75,14 @@
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                                 body: 'id=' + encodeURIComponent(id)
+                            }).then(res => res.text())
+                            .then(response => {
+                                Swal.fire(
+                                    'Deleted!',
+                                    response,
+                                    'success'
+                                );
+                                item.remove();
                             })
 
     </script>
