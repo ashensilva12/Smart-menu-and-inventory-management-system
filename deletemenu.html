@@ -37,6 +37,11 @@
                     document.getElementById('menu-items').innerHTML = html;
                     addDeleteButtons();
                 })
+            .catch(err => {
+                    document.getElementById('menu-items').innerHTML = '<p>Failed to load items.</p>';
+                    console.error(err);
+                });
+        }
     </script>
 </body>
 </html>
