@@ -83,7 +83,20 @@
                                     'success'
                                 );
                                 item.remove();
-                            })
+                            }).catch(err => {
+                                Swal.fire(
+                                    'Error!',
+                                    'Delete failed. Please try again.',
+                                    'error'
+                                );
+                                console.error(err);
+                            });
+                        }
+                    });
+                });
+            });
+        }
+
 
     </script>
 </body>
