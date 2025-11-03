@@ -20,4 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     // Delete from DB
     $stmt = $con->prepare("DELETE FROM menu WHERE id = ?");
     $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "Item deleted successfully.";
+    } else {
+        echo "Error deleting item: " . $con->error;
+    }
 ?>
