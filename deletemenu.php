@@ -25,4 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     } else {
         echo "Error deleting item: " . $con->error;
     }
+$stmt->close();
+} else {
+    echo "Invalid request.";
+}
+
+$con->close();
 ?>
