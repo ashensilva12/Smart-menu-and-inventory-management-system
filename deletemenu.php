@@ -17,5 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             unlink($imgPath);
         }
     }
-
+    // Delete from DB
+    $stmt = $con->prepare("DELETE FROM menu WHERE id = ?");
+    $stmt->bind_param("i", $id);
 ?>
