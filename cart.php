@@ -372,14 +372,14 @@ try {
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host       = 'smtp-relay.brevo.com';
+        $mail->Host       = '';
         $mail->SMTPAuth   = true;
-        $mail->Username   = '93b60b001@smtp-brevo.com';
-        $mail->Password   = 'U0ES13KZ4mALxV5g';
+        $mail->Username   = '';
+        $mail->Password   = '';
         $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom('admin@ashenlakshitha.online', 'The Kings Menu');
+        $mail->setFrom('', 'The Kings Menu');
         $mail->addAddress($customerEmail);
 
         $mail->isHTML(true);
