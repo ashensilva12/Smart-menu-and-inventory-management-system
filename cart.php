@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/session_check.php';
 session_start();
 
 // === SweetAlert2 HTML wrapper (non-destructive) ===
@@ -110,12 +111,19 @@ set_error_handler(function($errno, $errstr, $errfile, $errline) {
     exit;
 });
 
-// Check login (expects email in session)
-if (empty($_SESSION['customer_email'])) {
-    echo json_encode(["success" => false, "message" => "User not logged in"]);
-    exit;
+// Helpers for simple status persistence (JSON file)
+function load_statuses() {
+  $file = __DIR__ . '/order_status.json';
+  if (!file_exists($file)) return [];
+  $json = file_get_contents($file);
+  $data = json_decode($json, true);
+  return is_array($data) ? $data : [];
 }
-$customerEmail = $_SESSION['customer_email'];
+
+function save_statuses($statuses) {
+  $file = __DIR__ . '/order_status.json';
+  file_put_contents($file, json_encode($statuses, JSON_PRETTY_PRINT), LOCK_EX);
+}
 
 // Read JSON input
 $input = file_get_contents('php://input');
@@ -135,19 +143,59 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 
 if (empty($data['cart']) || !is_array($data['cart'])) {
-    echo json_encode(["success" => false, "message" => "Cart is empty or invalid"]);
-    exit;
+  echo json_encode(["success" => false, "message" => "Cart is empty or invalid"]);
+  exit;
 }
 
-// Validate totals
-$cart     = $data['cart'];
-$subtotal = filter_var($data['subtotal'] ?? 0, FILTER_VALIDATE_FLOAT);
-$charge   = filter_var($data['charge']   ?? 0, FILTER_VALIDATE_FLOAT);
-$total    = filter_var($data['total']    ?? 0, FILTER_VALIDATE_FLOAT);
-if ($subtotal === false || $charge === false || $total === false) {
-    echo json_encode(["success" => false, "message" => "Invalid numeric values"]);
-    exit;
+$cart = $data['cart'];
+
+// Customer / order metadata (guest checkout)
+$customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
+$customerName = trim($customer['name'] ?? '');
+$customerEmail = filter_var($customer['email'] ?? '', FILTER_VALIDATE_EMAIL);
+$customerPhone = trim($customer['phone'] ?? '');
+$orderType = ($customer['orderType'] ?? '') === 'Delivery' ? 'Delivery' : 'Pickup';
+$customerAddress = trim($customer['address'] ?? '');
+$customerNotes = trim($customer['notes'] ?? '');
+$promoCode = strtoupper(trim($customer['promoCode'] ?? ''));
+
+if ($customerName === '' || !$customerEmail || $customerPhone === '') {
+  echo json_encode(["success" => false, "message" => "Missing customer details (name, email, phone)"]);
+  exit;
 }
+if ($orderType === 'Delivery' && $customerAddress === '') {
+  echo json_encode(["success" => false, "message" => "Delivery address is required"]);
+  exit;
+}
+
+// Validate items and recompute totals server-side
+$calculatedSubtotal = 0.0;
+$itemCount = 0;
+foreach ($cart as $item) {
+  if (!isset($item['name'], $item['price'], $item['quantity'])) {
+    echo json_encode(["success" => false, "message" => "Invalid item format"]);
+    exit;
+  }
+  $itemPrice = filter_var($item['price'], FILTER_VALIDATE_FLOAT);
+  $itemQty   = filter_var($item['quantity'], FILTER_VALIDATE_INT);
+  if ($itemPrice === false || $itemQty === false || $itemQty <= 0) {
+    echo json_encode(["success" => false, "message" => "Invalid item price or quantity"]);
+    exit;
+  }
+  $calculatedSubtotal += ($itemPrice * $itemQty);
+  $itemCount += $itemQty;
+}
+
+$promoRates = [ 'SAVE10' => 0.10 ];
+$promoRate = $promoRates[$promoCode] ?? 0;
+$promoDiscount = $calculatedSubtotal * $promoRate;
+$deliveryFee = $orderType === 'Delivery' ? 200 : 0;
+$charge = max(0, ($calculatedSubtotal - $promoDiscount) * 0.10);
+$calculatedTotal = max(0, $calculatedSubtotal - $promoDiscount + $deliveryFee + $charge);
+
+// Use server-side totals to prevent tampering
+$subtotal = $calculatedSubtotal;
+$total = $calculatedTotal;
 
 try {
     // -------- Build bill HTML (beautiful invoice) --------
@@ -156,6 +204,12 @@ try {
     $orderDate  = date('F j, Y g:i A');
 
     $itemsRows = '';
+    $safeName = htmlspecialchars($customerName, ENT_QUOTES, 'UTF-8');
+    $safeEmail = htmlspecialchars($customerEmail, ENT_QUOTES, 'UTF-8');
+    $safePhone = htmlspecialchars($customerPhone, ENT_QUOTES, 'UTF-8');
+    $safeAddress = htmlspecialchars($customerAddress, ENT_QUOTES, 'UTF-8');
+    $safeNotes = htmlspecialchars($customerNotes, ENT_QUOTES, 'UTF-8');
+    $safeType = htmlspecialchars($orderType, ENT_QUOTES, 'UTF-8');
     foreach ($cart as $item) {
         if (!isset($item['name'], $item['price'], $item['quantity'])) {
             throw new Exception("Invalid item format in cart");
@@ -243,7 +297,11 @@ try {
         <div class="left box">
           <div class="kv"><strong>Invoice No:</strong> '.$invoiceNo.'</div>
           <div class="kv"><strong>Date:</strong> '.$orderDate.'</div>
-          <div class="kv"><strong>Customer:</strong> '.htmlspecialchars($customerEmail, ENT_QUOTES, "UTF-8").'</div>
+          <div class="kv"><strong>Name:</strong> '.$safeName.'</div>
+          <div class="kv"><strong>Email:</strong> '.$safeEmail.'</div>
+          <div class="kv"><strong>Phone:</strong> '.$safePhone.'</div>
+          <div class="kv"><strong>Type:</strong> '.$safeType.'</div>
+          <div class="kv"><strong>Address:</strong> '.($safeType === 'Delivery' ? ($safeAddress ?: 'N/A') : 'Pickup').'</div>
         </div>
         <div class="right box">
           <div class="muted" style="margin-bottom:6px;">Billed By</div>
@@ -272,12 +330,15 @@ try {
       <div class="summary">
         <div class="totals">
           <div class="row"><div>Subtotal</div><div>Rs.'.number_format($subtotal, 2).'</div></div>
+          <div class="row"><div>Promo Savings</div><div>-Rs.'.number_format($promoDiscount, 2).'</div></div>
+          <div class="row"><div>Delivery / Pickup</div><div>Rs.'.number_format($deliveryFee, 2).'</div></div>
           <div class="row"><div>Service Charge (10%)</div><div>Rs.'.number_format($charge, 2).'</div></div>
           <div class="row total"><div>Total</div><div>Rs.'.number_format($total, 2).'</div></div>
         </div>
       </div>
 
       <div class="thanks">🍽️ Thank you for your order! We hope to serve you again soon.</div>
+      <div class="thanks" style="margin-top:6px;">Notes: '.($safeNotes ?: '—').'</div>
 
       <div class="footer">
         The Kings Menu • admin@ashenlakshitha.online
@@ -343,39 +404,49 @@ try {
     $DB_PASS = '1234';
     $DB_NAME = 'resturent';
 
-    // Count items
-    $itemsCount = 0;
-    foreach ($cart as $it) {
-        $qty = filter_var($it['quantity'], FILTER_VALIDATE_INT);
-        if ($qty !== false) $itemsCount += max(0, (int)$qty);
-    }
-
     $mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     if ($mysqli->connect_errno) {
         log_error("DB connect error: " . $mysqli->connect_error);
     } else {
         $mysqli->set_charset('utf8mb4');
 
-        $customerName = 'Guest';
-        if ($stmt = $mysqli->prepare("SELECT name FROM customer WHERE email = ? LIMIT 1")) {
+      $dbCustomerName = $customerName;
+      if ($stmt = $mysqli->prepare("SELECT name FROM customer WHERE email = ? LIMIT 1")) {
             $stmt->bind_param("s", $customerEmail);
             if ($stmt->execute()) {
                 $stmt->bind_result($foundName);
-                if ($stmt->fetch() && $foundName) $customerName = $foundName;
+          if ($stmt->fetch() && $foundName) $dbCustomerName = $foundName;
             }
             $stmt->close();
         }
 
-        if ($itemsCount > 0 && $total > 0) {
-            if ($stmt = $mysqli->prepare("INSERT INTO orders (customer, items, total) VALUES (?, ?, ?)")) {
-                $stmt->bind_param("sid", $customerName, $itemsCount, $total);
-                if (!$stmt->execute()) log_error("Insert failed: " . $stmt->error);
-                $stmt->close();
+      if ($itemCount > 0 && $total > 0) {
+        if ($stmt = $mysqli->prepare("INSERT INTO orders (customer, items, total) VALUES (?, ?, ?)")) {
+          $stmt->bind_param("sid", $dbCustomerName, $itemCount, $total);
+          if (!$stmt->execute()) {
+            log_error("Insert failed: " . $stmt->error);
+          } else {
+            $orderId = $stmt->insert_id;
+            $statuses = load_statuses();
+            $statuses[$orderId] = [
+              'orderId' => $orderId,
+              'customer' => $dbCustomerName,
+              'status' => 'placed',
+              'orderType' => $orderType,
+              'email' => $customerEmail,
+              'phone' => $customerPhone,
+              'address' => $customerAddress,
+              'total' => $total,
+              'updatedAt' => date('c')
+            ];
+            save_statuses($statuses);
+          }
+          $stmt->close();
             } else {
                 log_error("Prepare failed: " . $mysqli->error);
             }
         } else {
-            log_error("Skip insert: invalid items/total (items=$itemsCount, total=$total)");
+        log_error("Skip insert: invalid items/total (items=$itemCount, total=$total)");
         }
 
         $mysqli->close();
@@ -383,8 +454,10 @@ try {
 
     // -------- Success JSON (menu.html will show SweetAlert) --------
     echo json_encode([
-        "success" => true,
-        "message" => "Order placed successfully! Bill sent to $customerEmail"
+      "success" => true,
+      "message" => "Order placed successfully! Bill sent to $customerEmail",
+      "orderId" => isset($orderId) ? $orderId : null,
+      "status" => 'placed'
     ]);
 
 } catch (Exception $e) {
