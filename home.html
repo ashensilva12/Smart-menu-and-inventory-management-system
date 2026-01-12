@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Digital Menu | Restaurant</title>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
@@ -14,12 +15,12 @@
             <a href="#" class="logo">The Kings<span>Menu</span></a>
             <nav>
                 <ul>
-                    <li><a href="home.html" class="current_page" >Home</a></li>
-                    <li><a href="menu.html">Menu</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contactus.html">Contact Us</a></li>
+                    <li><a href="home.php" class="current_page" >Home</a></li>
+                    <li><a href="menu.php">Menu</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contactus_page.php">Contact Us</a></li>
                     <li>
-                        <a href="Loggin.html">
+                        <a href="user_details.php">
                             <div class="logging" id="log">
                                 <span>
                                     <img src="pics/log.png">
@@ -33,12 +34,167 @@
     </header>
     
     <!-- Hero Section -->
-    <section class="hero">    
-            <div class="container">
-                <h1>Welcome to the Kings Menu Resturent</h1>
-                <p>Come in hungry, leave full of flavor and unforgettable memories,where every bite is crafted with passion and served with care.</p>
-                <a href="menu.html" class="btn">View Menu</a>
+    <section class="hero">
+        <div class="container hero-inner">
+            <div class="hero-copy">
+                <div class="eyebrow-pill">New season menu</div>
+                <h1>Elevated comfort, fast to your table.</h1>
+                <p>From sunrise hoppers to late-night grills, track live availability and order in a tap.</p>
+                <div class="cta-row">
+                    <a href="menu.php" class="btn primary">Order now</a>
+                    <a href="about.php" class="btn ghost">Meet the kitchen</a>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-chip">⏱ 20-30 min delivery</span>
+                    <span class="meta-chip">🧊 Cold-chain desserts</span>
+                    <span class="meta-chip">✅ Secure checkout</span>
+                </div>
             </div>
+
+            <div class="hero-visual">
+                <div class="hero-photo">
+                    <img src="pics/home.jpg" alt="Signature platter and cocktails at The Kings Menu">
+                    <div class="photo-badge">Since 2020 • Colombo</div>
+                </div>
+                <div class="halo"></div>
+                <div class="hero-card">
+                    <div class="card-top">
+                        <div>
+                            <p class="eyebrow">Spotlight dish</p>
+                            <h3>Fire-grilled Surf & Turf</h3>
+                            <p class="note">Pepper rub, garlic butter, charred lemon</p>
+                        </div>
+                        <span class="price-pill">Rs. 3,250</span>
+                    </div>
+                    <div class="tag-line">
+                        <span class="tag">Chef’s pick</span>
+                        <span class="tag">Live availability</span>
+                    </div>
+                    <div class="mini-list">
+                        <div class="mini-card">
+                            <div class="mini-title">Crispy Hoppers</div>
+                            <div class="mini-note">Coconut lace, seeni sambol</div>
+                            <div class="mini-price">Rs. 1,050</div>
+                        </div>
+                        <div class="mini-card">
+                            <div class="mini-title">Midnight Ramen</div>
+                            <div class="mini-note">Chili oil, soft egg, miso broth</div>
+                            <div class="mini-price">Rs. 1,480</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container feature-grid">
+            <div class="feature-card">
+                <div class="icon-circle">⚡</div>
+                <h4>Fast & reliable</h4>
+                <p>Live prep times and delivery windows keep you in the loop.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-circle">🥗</div>
+                <h4>Seasonal plates</h4>
+                <p>Chef-updated menu with what’s freshest today.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-circle">🔒</div>
+                <h4>Secure checkout</h4>
+                <p>Save your favorites, reorder in seconds, stay in control.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-circle">🌙</div>
+                <h4>Late-night bites</h4>
+                <p>Midnight menu for cravings after hours.</p>
+            </div>
+        </div>
+
+        <div class="container spotlight">
+            <div class="spotlight-head">
+                <div>
+                    <p class="eyebrow">Guest favorites</p>
+                    <h2>What regulars reorder</h2>
+                </div>
+                <a class="link" href="menu.php">See full menu →</a>
+            </div>
+            <div class="spotlight-grid">
+                <div class="spot-card">
+                    <div class="badge">🔥 Bestseller</div>
+                    <h3>Smoked Jackfruit Tacos</h3>
+                    <p>Charred corn, lime crema, pickled onions, soft tortillas.</p>
+                </div>
+                <div class="spot-card">
+                    <div class="badge">🥥 Sweet</div>
+                    <h3>Coconut Tres Leches</h3>
+                    <p>Toasted coconut, condensed milk drizzle, vanilla cream.</p>
+                </div>
+                <div class="spot-card">
+                    <div class="badge">🌶 Bold</div>
+                    <h3>Devilled Prawn Rice</h3>
+                    <p>Spiced prawns, curry leaves, wok-tossed jasmine rice.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="food-gallery">
+            <div class="container">
+                <div class="gallery-head">
+                    <p class="eyebrow">See the spread</p>
+                    <h2>Plates fresh from our kitchen</h2>
+                    <p class="gallery-sub">A peek at what locals crave—grab yours in a tap.</p>
+                </div>
+                <div class="gallery-grid">
+                    <article class="gallery-card">
+                        <img src="pics/breakfast/hoppers.jpg" alt="Crispy hoppers with sambol">
+                        <div class="gallery-overlay">
+                            <span class="pill">Breakfast</span>
+                            <h3>Crispy Hoppers</h3>
+                            <p>Seeni sambol, coconut lace, soft egg.</p>
+                        </div>
+                    </article>
+                    <article class="gallery-card">
+                        <img src="pics/dinner/kottu.jpg" alt="Cheesy chicken kottu">
+                        <div class="gallery-overlay">
+                            <span class="pill">Street favorite</span>
+                            <h3>Cheesy Chicken Kottu</h3>
+                            <p>Triple cheese pull, peppers, hot butter style.</p>
+                        </div>
+                    </article>
+                    <article class="gallery-card">
+                        <img src="pics/lunch/friedrice.jpg" alt="Seafood fried rice">
+                        <div class="gallery-overlay">
+                            <span class="pill">Lunch</span>
+                            <h3>Seafood Fried Rice</h3>
+                            <p>Prawn, cuttlefish, wok char, spring onion.</p>
+                        </div>
+                    </article>
+                    <article class="gallery-card">
+                        <img src="pics/desert/falooda.jpg" alt="Falooda dessert">
+                        <div class="gallery-overlay">
+                            <span class="pill">Dessert</span>
+                            <h3>Royal Falooda</h3>
+                            <p>Rose milk, basil seeds, ice cream crown.</p>
+                        </div>
+                    </article>
+                    <article class="gallery-card">
+                        <img src="pics/lunch/pizza.jpg" alt="Wood-fired pizza">
+                        <div class="gallery-overlay">
+                            <span class="pill">Wood-fired</span>
+                            <h3>Charred Pepperoni</h3>
+                            <p>Mozzarella, chili honey, blistered crust.</p>
+                        </div>
+                    </article>
+                    <article class="gallery-card">
+                        <img src="pics/desert/mangojuice.jpg" alt="Fresh mango juice">
+                        <div class="gallery-overlay">
+                            <span class="pill">Coolers</span>
+                            <h3>Sunrise Mango Cooler</h3>
+                            <p>Fresh mango, lime zest, crushed ice.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
     </section>
     <footer>
         <p>&copy; 2020-2025 The Kings Menu Pvt Ltd</p>

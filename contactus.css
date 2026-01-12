@@ -1,9 +1,9 @@
 :root {
     --primary-color: #e63946;
-    --secondary-color: #f1faee;
-    --accent-color: #a8dadc;
-    --dark-color: #1d3557;
-    --light-color: #f8f9fa;
+    --secondary-color: #0b1220;
+    --accent-color: #7cd4f4;
+    --dark-color: #0f172a;
+    --light-color: #121c31;
     --success-color: #2a9d8f;
     --warning-color: #e9c46a;
 }
@@ -11,56 +11,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 body {
-    background-color: var(--secondary-color);
-    color: #333;
+    background: radial-gradient(circle at 20% 20%, rgba(124, 212, 244, 0.08), transparent 24%),
+                radial-gradient(circle at 80% 0%, rgba(230, 57, 70, 0.12), transparent 30%),
+                var(--secondary-color);
+    color: #e5e7eb;
 }
 .container {
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 20px;
-}
-/* Header Styles */
-header {
-    background-color: var(--dark-color);
-    color: white;
-    padding: 15px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
-.logo span {
-    color: var(--primary-color);
-}
-nav ul {
-    display: flex;
-    list-style: none;
-}
-nav ul li {
-    margin-left: 20px;
-}
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-nav ul li a:hover {
-    color: var(--accent-color);
-}
-.current_page{
-    color:var(--primary-color);
 }
     .contact-container {
         display: grid;
@@ -68,15 +30,16 @@ nav ul li a:hover {
         gap: 40px;
     }
     .contact-info {
-        background-color: var(--light-color);
+        background: var(--light-color);
         padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 14px;
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+        border: 1px solid #1f2937;
     }
     .contact-info h2 {
-        color: var(--dark-color);
-        margin-bottom: 30px;
-        font-size: 2rem;
+        color: #f8fafc;
+        margin-bottom: 26px;
+        font-size: 1.8rem;
     }
     .info-item {
         display: flex;
@@ -96,11 +59,11 @@ nav ul li a:hover {
         flex-shrink: 0;
     }
     .info-content h3 {
-        color: var(--dark-color);
+        color: #f8fafc;
         margin-bottom: 5px;
     }
     .info-content p, .info-content a {
-        color: #666;
+        color: #9ca3af;
         text-decoration: none;
         line-height: 1.6;
     }
@@ -108,15 +71,16 @@ nav ul li a:hover {
         color: var(--primary-color);
     }
     .contact-form {
-        background-color: white;
+        background: var(--light-color);
         padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 14px;
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+        border: 1px solid #1f2937;
     }
     .contact-form h2 {
-        color: var(--dark-color);
-        margin-bottom: 30px;
-        font-size: 2rem;
+        color: #f8fafc;
+        margin-bottom: 26px;
+        font-size: 1.8rem;
     }
     .form-group {
         margin-bottom: 20px;
@@ -124,16 +88,18 @@ nav ul li a:hover {
     .form-group label {
         display: block;
         margin-bottom: 8px;
-        font-weight: 600;
-        color: var(--dark-color);
+        font-weight: 700;
+        color: #e5e7eb;
     }
     .form-group input,
     .form-group textarea {
         width: 100%;
         padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        border: 1px solid #1f2937;
+        border-radius: 10px;
         font-size: 1rem;
+        background: #0f172a;
+        color: #f8fafc;
     }
         .form-group textarea {
         height: 150px;

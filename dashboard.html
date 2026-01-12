@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | The Kings Menu</title>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
@@ -13,8 +14,8 @@
             <a href="#" class="logo">The Kings<span>Menu</span> <span class="admin-badge">Admin</span></a>
             <nav>
                 <ul>
-                    <li><a href="home.html">View Site</a></li>
-                    <li><a href="Loggin.html" id="logout-btn">Logout</a></li>
+                    <li><a href="home.php">View Site</a></li>
+                    <li><a href="logout.php" id="logout-btn">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -30,10 +31,10 @@
         
         <nav class="admin-nav">
             <ul>
-                <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                <li><a href="inventory.html"> Inventory</a></li>
-                <li><a href="newitem.html"> Add Items</a></li>
-                <li><a href="deletemenu.html">Delete Menu Items</a></li>
+                <li><a href="admin_dashboard.php" class="active">Dashboard</a></li>
+                <li><a href="admin_inventory.php"> Inventory</a></li>
+                <li><a href="admin_newitem.php"> Add Items</a></li>
+                <li><a href="admin_deletemenu.php">Delete Menu Items</a></li>
             </ul>
         </nav>
     </div>
@@ -46,8 +47,51 @@
             <div class="section-header">
                 <h2>Dashboard </h2>
             </div>   
-            <div class="btn">
-                <button type="submit" id="submitBtn" class="btn btnprimary">Clear previous orders</button>
+            <div class="controls-row">
+                <div class="filters">
+                    <input type="search" id="search-input" placeholder="Search by order ID or customer" />
+                    <select id="status-filter">
+                        <option value="all">All statuses</option>
+                        <option value="placed">Placed</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="ready">Ready</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button class="btn small" id="refresh-btn">Refresh</button>
+                    <button class="btn small" id="export-btn">Export CSV</button>
+                    <button type="button" id="submitBtn" class="btn btnprimary">Clear previous orders</button>
+                    <div class="bulk-actions">
+                        <label for="bulk-status">Bulk status</label>
+                        <select id="bulk-status">
+                            <option value="">Choose…</option>
+                            <option value="placed">Placed</option>
+                            <option value="preparing">Preparing</option>
+                            <option value="ready">Ready</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <button class="btn small" id="bulk-apply">Apply</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-strip" id="alert-strip"></div>
+
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-title">Status mix</div>
+                    <div class="bar-stack" id="status-stack"></div>
+                    <div class="legend" id="status-legend"></div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">Revenue by status</div>
+                    <div class="progress-list" id="revenue-list"></div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">Activity feed</div>
+                    <ul class="activity-feed" id="activity-feed"></ul>
+                </div>
             </div>
             <div class="dashboard-grid">
                 <div class="recent-orders">
@@ -56,13 +100,18 @@
                         <table id="ordersTable">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" id="select-all" aria-label="Select all" /></th>
                                     <th>Order ID</th>
                                     <th>Customer</th>
                                     <th>Items</th>
                                     <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Updated</th>
+                                    <th>Change</th>
                                 </tr>
                             </thead>
-                            <tbody>                              
+                            <tbody>
+                                <tr><td colspan="8">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -72,34 +121,231 @@
     </main>
 
     <script>
-        fetch('dashboard.php')
-            .then(response => response.text())
-            .then(data => {
-                document.querySelector('#ordersTable tbody').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading data:', error);
-                document.querySelector('#ordersTable tbody').innerHTML = '<tr><td colspan="4">Failed to load data</td></tr>';
+    const statusOptions = ['placed','preparing','ready','completed'];
+    let orders = [];
+    const selected = new Set();
+
+    const tbody = document.querySelector('#ordersTable tbody');
+    const searchInput = document.getElementById('search-input');
+    const statusFilter = document.getElementById('status-filter');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const clearBtn = document.getElementById('submitBtn');
+    const selectAll = document.getElementById('select-all');
+    const bulkSelect = document.getElementById('bulk-status');
+    const bulkApply = document.getElementById('bulk-apply');
+    const alertStrip = document.getElementById('alert-strip');
+    const statusStack = document.getElementById('status-stack');
+    const statusLegend = document.getElementById('status-legend');
+    const revenueList = document.getElementById('revenue-list');
+    const activityFeed = document.getElementById('activity-feed');
+
+    function statusPill(status) {
+        const cls = statusOptions.includes(status) ? status : 'placed';
+        return `<span class="status-pill ${cls}">${cls}</span>`;
+    }
+
+    function render() {
+        const term = searchInput.value.trim().toLowerCase();
+        const sFilter = statusFilter.value;
+        const rows = orders.filter(o => {
+            const matchTerm = !term || `${o.orderID}`.includes(term) || (o.customer || '').toLowerCase().includes(term);
+            const matchStatus = sFilter === 'all' || o.status === sFilter;
+            return matchTerm && matchStatus;
         });
-        document.getElementById('submitBtn').addEventListener('click', function () {
-        if (confirm("Are you sure you want to clear all previous orders?")) {
-            fetch('dashboard.php?clear=1')
-                .then(response => response.text())
-                .then(data => {
-                    alert(data); // optional confirmation message
-                    // Reload the table after clearing
-                    return fetch('dashboard.php');
-                })
-                .then(response => response.text())
-                .then(data => {
-                    document.querySelector('#ordersTable tbody').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error clearing orders:', error);
-                    alert("Failed to clear orders.");
-                });
+
+        if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="8">No orders found.</td></tr>';
+            return;
         }
+
+        tbody.innerHTML = rows.map(o => {
+            const updated = o.updatedAt ? new Date(o.updatedAt).toLocaleString() : '—';
+            return `
+                <tr>
+                    <td><input type="checkbox" class="row-select" data-id="${o.orderID}" ${selected.has(o.orderID) ? 'checked' : ''} /></td>
+                    <td>${o.orderID}</td>
+                    <td>${o.customer || 'Guest'}</td>
+                    <td>${o.items}</td>
+                    <td>Rs.${o.total.toFixed(2)}</td>
+                    <td>${statusPill(o.status)}</td>
+                    <td>${updated}</td>
+                    <td>
+                        <select data-id="${o.orderID}" class="status-select">
+                            ${statusOptions.map(s => `<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+                        </select>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        document.querySelectorAll('.status-select').forEach(sel => {
+            sel.addEventListener('change', e => updateStatus(e.target.dataset.id, e.target.value));
+        });
+        document.querySelectorAll('.row-select').forEach(cb => {
+            cb.addEventListener('change', e => {
+                const id = Number(e.target.dataset.id);
+                if (e.target.checked) selected.add(id); else selected.delete(id);
+                syncSelectAll();
+            });
+        });
+
+        syncSelectAll();
+        renderInsights(rows);
+    }
+
+    function loadOrders() {
+        tbody.innerHTML = '<tr><td colspan="8">Loading...</td></tr>';
+        fetch('orders_list.php')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) throw new Error(data.message || 'Failed to load');
+                orders = data.orders || [];
+                render();
+            })
+            .catch(err => {
+                console.error(err);
+                tbody.innerHTML = `<tr><td colspan="8">${err.message}</td></tr>`;
+            });
+    }
+
+    function updateStatus(orderId, status) {
+        return fetch('order_status_api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: Number(orderId), status })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) throw new Error(data.message || 'Update failed');
+            const idx = orders.findIndex(o => o.orderID == orderId);
+            if (idx >= 0) {
+                orders[idx].status = status;
+                orders[idx].updatedAt = new Date().toISOString();
+            }
+            render();
+            return data;
+        })
+        .catch(err => {
+            alert('Failed to update status: ' + err.message);
+            loadOrders();
+            throw err;
+        });
+    }
+
+    function bulkUpdate() {
+        const target = bulkSelect.value;
+        if (!target) {
+            alert('Pick a bulk status first');
+            return;
+        }
+        const ids = Array.from(selected);
+        if (!ids.length) {
+            alert('Select at least one order');
+            return;
+        }
+        bulkApply.disabled = true;
+        const updates = ids.map(id => updateStatus(id, target));
+        Promise.allSettled(updates).finally(() => {
+            bulkApply.disabled = false;
+        });
+    }
+
+    function syncSelectAll() {
+        const visibleRows = [...document.querySelectorAll('.row-select')];
+        const allChecked = visibleRows.length > 0 && visibleRows.every(cb => cb.checked);
+        selectAll.checked = allChecked;
+        selectAll.indeterminate = !allChecked && visibleRows.some(cb => cb.checked);
+    }
+
+    function renderInsights(rows) {
+        const counts = { placed: 0, preparing: 0, ready: 0, completed: 0 };
+        const revenue = { placed: 0, preparing: 0, ready: 0, completed: 0 };
+        const now = Date.now();
+        const alerts = [];
+        rows.forEach(o => {
+            const s = statusOptions.includes(o.status) ? o.status : 'placed';
+            counts[s]++;
+            revenue[s] += Number(o.total) || 0;
+            const updatedAt = o.updatedAt ? new Date(o.updatedAt).getTime() : null;
+            const ageMins = updatedAt ? (now - updatedAt) / 60000 : null;
+            if (o.total >= 500) alerts.push({ type: 'high', text: `High value Rs.${o.total.toFixed(0)} (Order ${o.orderID})` });
+            if (ageMins !== null && ageMins > 30 && s !== 'completed') alerts.push({ type: 'overdue', text: `Waiting ${Math.floor(ageMins)} mins (Order ${o.orderID})` });
+        });
+
+        const totalCount = Object.values(counts).reduce((a,b)=>a+b,0) || 1;
+        statusStack.innerHTML = statusOptions.map(s => {
+            const pct = (counts[s]/totalCount)*100;
+            return `<span class="bar bar-${s}" style="width:${pct}%" title="${counts[s]} ${s}"></span>`;
+        }).join('');
+        statusLegend.innerHTML = statusOptions.map(s => `<span><span class="dot dot-${s}"></span>${s} (${counts[s]})</span>`).join('');
+
+        const maxRevenue = Math.max(...Object.values(revenue), 1);
+        revenueList.innerHTML = statusOptions.map(s => {
+            const pct = (revenue[s]/maxRevenue)*100;
+            return `<div class="progress-row"><div class="label">${s}</div><div class="bar-outer"><div class="bar-inner bar-${s}" style="width:${pct}%"></div></div><div class="value">Rs.${revenue[s].toFixed(0)}</div></div>`;
+        }).join('');
+
+        const activities = [...orders]
+            .filter(o => o.updatedAt)
+            .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+            .slice(0,6)
+            .map(o => {
+                const when = new Date(o.updatedAt).toLocaleString();
+                return `<li><div class="pill pill-${o.status}">${o.status}</div><div class="activity-body"><div class="title">Order ${o.orderID}</div><div class="meta">${o.customer || 'Guest'} • ${when}</div></div></li>`;
+            });
+        activityFeed.innerHTML = activities.length ? activities.join('') : '<li class="muted">No recent updates</li>';
+
+        alertStrip.innerHTML = alerts.length ? alerts.slice(0,3).map(a => `<span class="chip chip-${a.type}">${a.text}</span>`).join('') : '<span class="chip chip-ok">All clear</span>';
+    }
+
+    function exportCsv() {
+        if (!orders.length) {
+            alert('No data to export');
+            return;
+        }
+        const header = ['orderID','customer','items','total','status','updatedAt'];
+        const rows = orders.map(o => [o.orderID, o.customer || 'Guest', o.items, o.total, o.status, o.updatedAt || '']);
+        const csv = [header.join(','), ...rows.map(r => r.map(v => `'${String(v).replace(/'/g, "''")}'`).join(','))].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'orders.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Clear orders button
+    clearBtn.addEventListener('click', () => {
+        if (!confirm('Are you sure you want to clear all previous orders?')) return;
+        fetch('dashboard.php?clear=1')
+            .then(r => r.text())
+            .then(msg => {
+                alert(msg);
+                loadOrders();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Failed to clear orders.');
+            });
     });
+
+    searchInput.addEventListener('input', render);
+    statusFilter.addEventListener('change', render);
+    refreshBtn.addEventListener('click', loadOrders);
+    exportBtn.addEventListener('click', exportCsv);
+    selectAll.addEventListener('change', e => {
+        document.querySelectorAll('.row-select').forEach(cb => {
+            cb.checked = e.target.checked;
+            const id = Number(cb.dataset.id);
+            if (cb.checked) selected.add(id); else selected.delete(id);
+        });
+        syncSelectAll();
+    });
+    bulkApply.addEventListener('click', bulkUpdate);
+
+    loadOrders();
     </script>
 </body>
 </html>

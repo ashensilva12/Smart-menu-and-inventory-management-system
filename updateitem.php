@@ -1,20 +1,23 @@
 <?php
-  $itemID = $_POST['itemID'] ?? '';
-  $itemname = $_POST['itemname'] ?? '';
-  $category = $_POST['category'] ?? '';
+require_once __DIR__ . '/session_check.php';
+  $itemID = trim($_POST['itemID'] ?? '');
+  $itemname = trim($_POST['itemname'] ?? '');
+  $category = trim($_POST['category'] ?? '');
   $stock = $_POST['stock'] ?? '';
 
-  $cri1 = $itemID != "";
-  $cri2 = $itemname != "";
-  $cri3 = $category != "";
-  $cri4 = $stock != "";
+  $valid = $itemID !== '' && $itemname !== '' && $category !== '' && $stock !== '' && is_numeric($stock);
 
-  if (!$cri1 || !$cri2 || !$cri3 || !$cri4) exit();
+  if (!$valid) exit();
 
-  $con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+  $stock = (float)$stock;
 
-  $data = "SELECT currentStock FROM invitems WHERE itemID='$itemID'";
-  $result = $con->query($data);
+  // Default XAMPP MySQL uses root with no password; adjust if yours differs
+  $con = new mysqli('localhost', 'root', '', 'resturent');
+
+  $stmt = $con->prepare("SELECT currentStock FROM invitems WHERE itemID = ? AND category = ? LIMIT 1");
+  $stmt->bind_param('ss', $itemID, $category);
+  $stmt->execute();
+  $result = $stmt->get_result();
 
   echo '<!DOCTYPE html>
   <html lang="en">
@@ -27,8 +30,8 @@
 <body>';
     if ($result && $result->num_rows == 1) {
     $row = $result->fetch_assoc(); 
-    $currentStock = (int)$row['currentStock'];
-        if ($stock > $currentStock) {
+    $currentStock = (float)$row['currentStock'];
+      if ($stock > $currentStock) {
         echo "
         <script>
           Swal.fire({
@@ -37,13 +40,14 @@
             text: 'Item not enough to get. Please add this item first',
             confirmButtonText: 'OK'
           }).then(() => {
-            window.location.href = 'updateitem.html';
+            window.location.href = 'admin_updateitem.php';
           });
         </script>";
         } else {
         $newStock = $currentStock - $stock;
-        $check = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
-        if ($con->query($check) === true) {
+        $check = $con->prepare("UPDATE invitems SET currentStock = ? WHERE category = ? AND itemID = ?");
+        $check->bind_param('dss', $newStock, $category, $itemID);
+        if ($check->execute()) {
             echo "
             <script>
               Swal.fire({
@@ -52,7 +56,7 @@
                 text: 'Stock updated successfully.',
                 confirmButtonText: 'OK'
               }).then(() => {
-                window.location.href = 'updateitem.html';
+                window.location.href = 'admin_inventory.php';
               });
             </script>";
         }else {
@@ -64,10 +68,11 @@
                 text: 'Something went wrong, please try again.',
                 confirmButtonText: 'Retry'
               }).then(() => {
-                window.location.href = 'updateitem.html';
+                window.location.href = 'admin_updateitem.php';
               });
             </script>";
         }
+        $check->close();
     }
 }  else {
     echo "
@@ -78,10 +83,11 @@
         text: 'Can’t find this item. Please add it first.',
         confirmButtonText: 'Add Item'
       }).then(() => {
-        window.location.href = 'additem.html';
+        window.location.href = 'admin_additem.php';
       });
     </script>";
 }
+  $stmt->close();
 echo "</body></html>";
 $con->close();
 ?>

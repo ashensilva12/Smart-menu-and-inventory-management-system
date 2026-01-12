@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Status | The Kings Menu</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f7f8; margin:0; padding:20px; color:#111; }
+    h1 { margin:0 0 16px 0; }
+    table { width:100%; border-collapse: collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    th, td { padding:12px 10px; border-bottom:1px solid #ececec; text-align:left; }
+    th { background:#f3f4f6; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:0.4px; }
+    tr:last-child td { border-bottom:none; }
+    select { padding:6px 8px; border-radius:6px; border:1px solid #d0d0d0; }
+    .pill { display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .placed { background:#eef2ff; color:#312e81; }
+    .preparing { background:#fff7ed; color:#9a3412; }
+    .ready { background:#ecfeff; color:#0e7490; }
+    .completed { background:#ecfdf3; color:#166534; }
+    .meta { color:#555; font-size:13px; }
+  </style>
+</head>
+<body>
+  <h1>Order Status</h1>
+  <p class="meta">Update order progress (no payment gateway).</p>
+  <table id="orders-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Items</th>
+        <th>Total (Rs.)</th>
+        <th>Status</th>
+        <th>Updated</th>
+        <th>Change</th>
+      </tr>
+    </thead>
+    <tbody id="orders-body">
+      <tr><td colspan="7">Loading...</td></tr>
+    </tbody>
+  </table>
+
+<script>
+const statusOptions = ['placed','preparing','ready','completed'];
+const bodyEl = document.getElementById('orders-body');
+
+function statusPill(status) {
+  const cls = statusOptions.includes(status) ? status : 'placed';
+  return `<span class="pill ${cls}">${cls}</span>`;
+}
+
+function loadOrders() {
+  fetch('orders_list.php')
+    .then(r => r.json())
+    .then(data => {
+      if (!data.success) throw new Error(data.message || 'Failed to load orders');
+      renderRows(data.orders || []);
+    })
+    .catch(err => {
+      bodyEl.innerHTML = `<tr><td colspan="7">${err.message}</td></tr>`;
+    });
+}
+
+function renderRows(orders) {
+  if (!orders.length) {
+    bodyEl.innerHTML = '<tr><td colspan="7">No orders yet.</td></tr>';
+    return;
+  }
+  bodyEl.innerHTML = orders.map(o => {
+    const updated = o.updatedAt ? new Date(o.updatedAt).toLocaleString() : '—';
+    return `
+      <tr>
+        <td>${o.orderID}</td>
+        <td>${o.customer || 'Guest'}</td>
+        <td>${o.items}</td>
+        <td>${o.total.toFixed(2)}</td>
+        <td>${statusPill(o.status)}</td>
+        <td>${updated}</td>
+        <td>
+          <select data-id="${o.orderID}" class="status-select">
+            ${statusOptions.map(s => `<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </td>
+      </tr>
+    `;
+  }).join('');
+  document.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('change', (e) => updateStatus(e.target.dataset.id, e.target.value));
+  });
+}
+
+function updateStatus(orderId, status) {
+  fetch('order_status_api.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId: Number(orderId), status })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success) throw new Error(data.message || 'Update failed');
+    Swal.fire({ icon:'success', title:'Updated', timer:1000, showConfirmButton:false });
+    loadOrders();
+  })
+  .catch(err => Swal.fire({ icon:'error', title:'Error', text: err.message }));
+}
+
+loadOrders();
+</script>
+</body>
+</html>

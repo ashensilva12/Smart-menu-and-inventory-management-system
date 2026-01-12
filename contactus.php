@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/session_check.php';
     require 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;

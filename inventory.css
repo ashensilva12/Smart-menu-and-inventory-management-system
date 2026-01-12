@@ -1,12 +1,12 @@
 :root {
-    --primary-color: #2a9d8f;
-    --primary-hover: #21867a;
-    --secondary-color: #6c757d;
-    --secondary-hover: #5a6268;
+    --primary-color: #e63946;
+    --primary-hover: #ff7b87;
+    --secondary-color: #7cd4f4;
+    --secondary-hover: #9de3ff;
     --danger-color: #e63946;
-    --text-color: #333;
-    --border-color: #ddd;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --text-color: #e5e7eb;
+    --border-color: #1f2937;
+    --shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
 }
 * {
     box-sizing: border-box;
@@ -14,19 +14,22 @@
     padding: 0;
 }
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at 20% 20%, rgba(124, 212, 244, 0.08), transparent 24%),
+                radial-gradient(circle at 80% 0%, rgba(230, 57, 70, 0.12), transparent 30%),
+                #0b1220;
     color: var(--text-color);
     padding: 20px;
 }
 .admin-section {
-    background-color: white;
-    border-radius: 8px;
+    background-color: #121c31;
+    border-radius: 12px;
     box-shadow: var(--shadow);
     padding: 25px;
+    border: 1px solid #1f2937;
 }
 .section-header h2 {
-    color: #2a3f54;
+    color: #f8fafc;
     font-size: 28px;
     margin-bottom: 20px;
 }
@@ -34,13 +37,14 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 18px;
+    padding: 12px 18px;
     border: none;
-    border-radius: 6px;
-    font-weight: 500;
+    border-radius: 10px;
+    font-weight: 700;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
 }
 .btn-primary {
     background-color: var(--primary-color);
@@ -48,15 +52,15 @@ body {
 }
 .btn-primary:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 .btn-secondary {
     background-color: var(--secondary-color);
-    color: white;
+    color: #0b1220;
 }
 .btn-secondary:hover {
     background-color: var(--secondary-hover);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 .btn-back {
     background-color: var(--danger-color);
@@ -64,13 +68,25 @@ body {
 }
 .btn-back:hover {
     background-color: #b92330;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 .inventory-actions {
     margin-bottom: 30px;
     display: flex;
+    flex-direction: row;
     gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.inventory-actions a button {
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .inventory-actions {
+        flex-wrap: wrap;
+    }
 }
 .inventory-filters {
     display: flex;
@@ -92,8 +108,9 @@ body {
 .filter-group select {
     padding: 10px 12px;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: white;
+    border-radius: 8px;
+    background-color: #0f172a;
+    color: #e5e7eb;
     font-size: 14px;
     min-width: 180px;
 }
@@ -108,25 +125,29 @@ body {
     padding: 12px 20px;
     font-size: 16px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    background: #0f172a;
+    color: #e5e7eb;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.22);
     transition: all 0.3s ease;
 }
 #search-bar:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(124, 212, 244, 0.2);
 }
 /* ===== Table ===== */
 .inventory-table {
     overflow-x: auto;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
 }
 table {
     width: 100%;
     border-collapse: collapse;
+    color: #e5e7eb;
 }
 th, td {
     padding: 14px 16px;
@@ -134,14 +155,14 @@ th, td {
     border-bottom: 1px solid var(--border-color);
 }
 th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #2a3f54;
+    background-color: #0f172a;
+    font-weight: 700;
+    color: #e5e7eb;
     position: sticky;
     top: 0;
 }
 tr:hover {
-    background-color: rgba(42, 157, 143, 0.03);
+    background-color: rgba(124, 212, 244, 0.05);
 }
 @media (max-width: 768px) {
     .inventory-filters {

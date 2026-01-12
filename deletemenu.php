@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . '/session_check.php';
 // deletemenuitem.php
-$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+// Default XAMPP MySQL uses root with no password on localhost
+$con = new mysqli('localhost', 'root', '', 'resturent');
 if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }

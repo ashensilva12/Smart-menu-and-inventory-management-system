@@ -1,0 +1,45 @@
+<?php
+session_start();
+
+$Email = $_POST['email'] ?? '';
+$Password = $_POST['password'] ?? '';
+
+$Email = trim($Email);
+$Password = trim($Password);
+
+$cri1 = $Email != "";
+$cri2 = $Password != "";
+
+if (!$cri1 || !$cri2) exit();
+
+$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+
+if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}
+
+$Email = $con->real_escape_string($Email); // Prevent SQL injection
+$Password = $con->real_escape_string($Password);
+
+$data = "SELECT email, password, name FROM customer WHERE email='$Email' AND password='$Password'";
+$result = $con->query($data);
+
+if ($Email == "Admin@Log" && $Password == "1234") {
+    echo "<script>window.location.href = 'dashboard.html';</script>";
+    exit();
+}
+
+if ($result->num_rows == 1) {
+    $row = $result->fetch_assoc();
+    $_SESSION['customer_name'] = $row['name'];
+    echo "<script>window.location.href = 'home.html';</script>";
+    exit();
+}
+
+if ($result->num_rows == 0) {
+    echo "<script>alert('Something went wrong, please check again'); window.location.href = 'Loggin.html';</script>";
+    exit();
+}
+
+$con->close();
+?>

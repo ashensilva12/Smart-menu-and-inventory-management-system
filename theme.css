@@ -1,0 +1,125 @@
+/* Shared theme styling to align pages with the new About look */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap');
+
+:root {
+    --bg: #0b1220;
+    --panel: #0f172a;
+    --card: #121c31;
+    --primary: #e63946;
+    --accent: #7cd4f4;
+    --muted: #9ca3af;
+    --text: #e5e7eb;
+    --border: #1f2937;
+    --glow: rgba(230, 57, 70, 0.35);
+}
+
+* {
+    font-family: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.01em;
+}
+
+body {
+    background: radial-gradient(circle at 20% 20%, rgba(124, 212, 244, 0.08), transparent 24%),
+                radial-gradient(circle at 80% 0%, rgba(230, 57, 70, 0.12), transparent 30%),
+                var(--bg);
+    color: var(--text);
+}
+
+.container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: rgba(12, 18, 32, 0.9);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(8px);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.logo span { color: var(--primary); }
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: color 0.25s, background 0.25s;
+}
+
+nav a:hover { color: var(--accent); background: rgba(124, 212, 244, 0.08); }
+.current_page { color: var(--primary); }
+
+.logging {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.logging img { width: 22px; height: 22px; }
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 0;
+        gap: 10px;
+    }
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 10px 30px var(--glow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.25); }
+
+.card-surface {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+}
+
+.text-muted { color: var(--muted); }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>The Kings Menu</title>
+    <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="menu.css" />
 
     <!-- SweetAlert2 CSS & JS -->
@@ -13,6 +14,19 @@
     <style>
         /* Optional: nudge z-index so popups sit above sidebar/overlay if needed */
         .swal2-container { z-index: 9999 !important; }
+            /* Quick modal styling (kept here to avoid a separate CSS change) */
+            .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; z-index: 9000; }
+            .modal-overlay.active { display: flex; }
+            .modal { background: #fff; border-radius: 12px; max-width: 520px; width: 92%; box-shadow: 0 12px 32px rgba(0,0,0,0.18); padding: 20px; position: relative; }
+            .modal h3 { margin: 0 0 12px 0; }
+            .modal form { display: grid; gap: 12px; }
+            .modal label { font-weight: 600; font-size: 14px; }
+            .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 14px; }
+            .modal textarea { min-height: 80px; resize: vertical; }
+            .modal .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+            .modal .btn-primary { background: #111827; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; }
+            .modal .btn-secondary { background: #e5e7eb; color: #111; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; }
+            .helper-text { font-size: 12px; color: #6b7280; }
     </style>
 </head>
 <body>
@@ -22,14 +36,14 @@
             <a href="#" class="logo">The Kings<span>Menu</span></a>
             <nav>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="menu.html" class="current_page">Menu</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contactus.html">Contact</a></li>
+                    <li><a href="home.php">Home</a></li>
+                    <li><a href="menu.php" class="current_page">Menu</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contactus_page.php">Contact</a></li>
                     <li>
-                        <a href="Loggin.html">
+                        <a href="user_details.php">
                             <div class="logging" id="log">
-                                <span><img src="pics/log.png" alt="login" /></span>
+                                <span><img src="pics/log.png" alt="user" /></span>
                             </div>
                         </a>
                     </li>
@@ -83,6 +97,14 @@
                 <span id="cart-subtotal">Rs.0.00</span>
             </div>
             <div class="total-row">
+                <span>Promo Savings:</span>
+                <span id="cart-promo">-Rs.0.00</span>
+            </div>
+            <div class="total-row">
+                <span>Delivery / Pickup:</span>
+                <span id="cart-delivery">Rs.0.00</span>
+            </div>
+            <div class="total-row">
                 <span>Service Charge (10%):</span>
                 <span id="cart-charge">Rs.0.00</span>
             </div>
@@ -94,12 +116,107 @@
         </div>
     </div>
 
+    <!-- Checkout Modal (guest checkout) -->
+    <div class="modal-overlay" id="checkout-overlay">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+            <h3 id="checkout-title">Checkout Details</h3>
+            <form id="checkout-form" novalidate>
+                <div>
+                    <label for="cust-name">Full Name *</label>
+                    <input id="cust-name" name="name" type="text" required />
+                </div>
+                <div>
+                    <label for="cust-email">Email *</label>
+                    <input id="cust-email" name="email" type="email" required />
+                </div>
+                <div>
+                    <label for="cust-phone">Phone *</label>
+                    <input id="cust-phone" name="phone" type="tel" placeholder="07x xxx xxxx" required />
+                </div>
+                <div>
+                    <label for="order-type">Order Type *</label>
+                    <select id="order-type" name="orderType" required>
+                        <option value="Pickup">Pickup</option>
+                        <option value="Delivery">Delivery</option>
+                    </select>
+                    <div class="helper-text">Delivery adds a small fee; address required.</div>
+                </div>
+                <div id="address-block" style="display:none;">
+                    <label for="cust-address">Delivery Address *</label>
+                    <textarea id="cust-address" name="address" placeholder="Street, city"></textarea>
+                </div>
+                <div>
+                    <label for="promo-code">Promo Code</label>
+                    <input id="promo-code" name="promo" placeholder="e.g., SAVE10" />
+                </div>
+                <div>
+                    <label for="cust-notes">Notes</label>
+                    <textarea id="cust-notes" name="notes" placeholder="Add delivery notes or preferences"></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-secondary" id="cancel-checkout">Cancel</button>
+                    <button type="submit" class="btn-primary">Place Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2020-2025 The Kings Menu Pvt Ltd</p>
     </footer>
 
     <script>
+    // Cart + checkout state
     let cart = [];
+    const DELIVERY_FEE = 200;
+    const PROMO_CODES = { 'SAVE10': 0.10 };
+    const orderState = { orderType: 'Pickup', promoCode: '' };
+    const customerState = { name: '', email: '', phone: '', address: '', notes: '' };
+
+    // Persistence helpers
+    function loadCartFromStorage() {
+        try {
+            const saved = localStorage.getItem('cart');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed)) cart = parsed;
+            }
+        } catch (e) {
+            console.warn('Failed to parse saved cart, starting fresh', e);
+            cart = [];
+        }
+    }
+
+    function saveCartToStorage() {
+        try {
+            if (cart.length === 0) localStorage.removeItem('cart');
+            else localStorage.setItem('cart', JSON.stringify(cart));
+        } catch (e) {
+            console.warn('Unable to persist cart', e);
+        }
+    }
+
+    function loadCustomerFromStorage() {
+        try {
+            const saved = localStorage.getItem('checkoutInfo');
+            if (!saved) return;
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') {
+                Object.assign(customerState, parsed.customer || {});
+                Object.assign(orderState, parsed.order || {});
+            }
+        } catch (e) {
+            console.warn('Unable to read saved checkout info', e);
+        }
+    }
+
+    function saveCustomerToStorage() {
+        try {
+            localStorage.setItem('checkoutInfo', JSON.stringify({ customer: customerState, order: orderState }));
+        } catch (e) {
+            console.warn('Unable to persist checkout info', e);
+        }
+    }
 
     // SweetAlert2 toast preset
     const Toast = Swal.mixin({
@@ -115,6 +232,8 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+        loadCartFromStorage();
+        loadCustomerFromStorage();
         loadMenuItems();
         initializeCart();
         setupCategoryFilter();
@@ -123,7 +242,7 @@
 
     // Load menu items from PHP and bind add-to-cart buttons
     function loadMenuItems() {
-        fetch('menu.php')
+        fetch('menu_data.php')
             .then(response => {
                 if (!response.ok) throw new Error('Failed to fetch menu items');
                 return response.text();
@@ -164,12 +283,23 @@
         updateCart();
     }
 
+    function computeTotals(subtotal) {
+        const promoRate = PROMO_CODES[orderState.promoCode?.toUpperCase?.() || ''] || 0;
+        const promoDiscount = subtotal * promoRate;
+        const deliveryFee = orderState.orderType === 'Delivery' ? DELIVERY_FEE : 0;
+        const charge = Math.max(0, (subtotal - promoDiscount) * 0.1);
+        const total = Math.max(0, subtotal - promoDiscount + deliveryFee + charge);
+        return { promoDiscount, deliveryFee, charge, total };
+    }
+
     // Update cart UI and totals
     function updateCart() {
         const cartItemsContainer = document.getElementById('cart-items');
         const cartSubtotal = document.getElementById('cart-subtotal');
         const cartCharge = document.getElementById('cart-charge');
         const cartTotal = document.getElementById('cart-total');
+        const cartPromo = document.getElementById('cart-promo');
+        const cartDelivery = document.getElementById('cart-delivery');
         const cartCount = document.querySelector('.cart-count');
 
         let subtotal = 0;
@@ -199,13 +329,15 @@
             });
         }
 
-        const charge = subtotal * 0.1;
-        const total = subtotal + charge;
+        const totals = computeTotals(subtotal);
 
         cartSubtotal.textContent = `Rs.${subtotal.toFixed(2)}`;
-        cartCharge.textContent = `Rs.${charge.toFixed(2)}`;
-        cartTotal.textContent = `Rs.${total.toFixed(2)}`;
+        cartPromo.textContent = `-Rs.${totals.promoDiscount.toFixed(2)}`;
+        cartDelivery.textContent = `Rs.${totals.deliveryFee.toFixed(2)}`;
+        cartCharge.textContent = `Rs.${totals.charge.toFixed(2)}`;
+        cartTotal.textContent = `Rs.${totals.total.toFixed(2)}`;
         cartCount.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
+        saveCartToStorage();
 
         // Bind quantity and remove buttons
         document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
@@ -299,89 +431,139 @@
         });
     }
 
-    // Checkout and send to PHP
+    // Checkout and send to PHP (guest checkout, no payments)
     function setupCheckout() {
         const checkoutBtn = document.getElementById('checkout-btn');
-        if (!checkoutBtn) return;
+        const overlay = document.getElementById('checkout-overlay');
+        const form = document.getElementById('checkout-form');
+        const nameEl = document.getElementById('cust-name');
+        const emailEl = document.getElementById('cust-email');
+        const phoneEl = document.getElementById('cust-phone');
+        const typeEl = document.getElementById('order-type');
+        const addressBlock = document.getElementById('address-block');
+        const addressEl = document.getElementById('cust-address');
+        const promoEl = document.getElementById('promo-code');
+        const notesEl = document.getElementById('cust-notes');
+        const cancelBtn = document.getElementById('cancel-checkout');
 
-        checkoutBtn.addEventListener('click', async () => {
+        if (!checkoutBtn || !overlay || !form) return;
+
+        // Prefill from saved state
+        nameEl.value = customerState.name;
+        emailEl.value = customerState.email;
+        phoneEl.value = customerState.phone;
+        typeEl.value = orderState.orderType || 'Pickup';
+        promoEl.value = orderState.promoCode || '';
+        addressEl.value = customerState.address || '';
+        notesEl.value = customerState.notes || '';
+        toggleAddress(typeEl.value);
+        updateCart();
+
+        checkoutBtn.addEventListener('click', () => {
             if (cart.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cart is empty',
-                    text: 'Add some delicious items first!'
-                });
+                Swal.fire({ icon: 'warning', title: 'Cart is empty', text: 'Add some delicious items first!' });
+                return;
+            }
+            overlay.classList.add('active');
+        });
+
+        cancelBtn?.addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
+
+        typeEl.addEventListener('change', (e) => {
+            orderState.orderType = e.target.value;
+            toggleAddress(orderState.orderType);
+            saveCustomerToStorage();
+            updateCart();
+        });
+
+        promoEl.addEventListener('input', (e) => {
+            orderState.promoCode = e.target.value.trim();
+            saveCustomerToStorage();
+            updateCart();
+        });
+
+        function toggleAddress(orderType) {
+            const needAddress = orderType === 'Delivery';
+            addressBlock.style.display = needAddress ? 'block' : 'none';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            customerState.name = nameEl.value.trim();
+            customerState.email = emailEl.value.trim();
+            customerState.phone = phoneEl.value.trim();
+            customerState.address = addressEl.value.trim();
+            customerState.notes = notesEl.value.trim();
+
+            orderState.orderType = typeEl.value;
+            orderState.promoCode = promoEl.value.trim();
+
+            if (!customerState.name || !customerState.email || !customerState.phone) {
+                Swal.fire({ icon: 'warning', title: 'Missing info', text: 'Name, email, and phone are required.' });
+                return;
+            }
+            if (orderState.orderType === 'Delivery' && !customerState.address) {
+                Swal.fire({ icon: 'warning', title: 'Address required', text: 'Please add a delivery address.' });
                 return;
             }
 
-            // Friendly pre-confirmation
-            const pre = await Swal.fire({
-                icon: 'info',
-                title: 'Proceed to Checkout?',
-                html: `
-                    <div style="text-align:left">
-                        <p><strong>Items:</strong> ${cart.reduce((s,i)=>s+i.quantity,0)}</p>
-                        <p><strong>Subtotal:</strong> Rs.${cart.reduce((s,i)=>s+i.price*i.quantity,0).toFixed(2)}</p>
-                        <p><strong>Service Charge (10%):</strong> Calculated at checkout</p>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Yes, continue',
-                cancelButtonText: 'Cancel'
-            });
-            if (!pre.isConfirmed) return;
-
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            const charge = subtotal * 0.1;
-            const total = subtotal + charge;
+            const totals = computeTotals(subtotal);
 
-            // Create a properly formatted order object
             const orderData = {
-                cart: cart.map(item => ({
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity
-                })),
-                subtotal: subtotal,
-                charge: charge,
-                total: total
+                cart: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
+                subtotal,
+                promoDiscount: totals.promoDiscount,
+                deliveryFee: totals.deliveryFee,
+                charge: totals.charge,
+                total: totals.total,
+                customer: {
+                    name: customerState.name,
+                    email: customerState.email,
+                    phone: customerState.phone,
+                    orderType: orderState.orderType,
+                    address: customerState.address,
+                    notes: customerState.notes,
+                    promoCode: orderState.promoCode
+                }
             };
+
+            saveCustomerToStorage();
 
             fetch('cart.php', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(orderData)
             })
             .then(res => {
-                if (!res.ok) {
-                    return res.text().then(text => { throw new Error(text) });
-                }
+                if (!res.ok) return res.text().then(text => { throw new Error(text || 'Checkout failed'); });
                 return res.json();
             })
             .then(data => {
                 Swal.fire({
                     icon: data.success ? 'success' : 'error',
                     title: data.success ? 'Order Placed!' : 'Checkout Failed',
-                    text: data.message
+                    text: data.message || 'Unknown response'
                 }).then(() => {
                     if (data.success) {
                         cart = [];
                         updateCart();
+                        overlay.classList.remove('active');
                         document.getElementById('cart-sidebar').classList.remove('active');
                         document.getElementById('cart-overlay').classList.remove('active');
+                        localStorage.removeItem('cart');
                     }
                 });
             })
             .catch(err => {
                 console.error('Checkout error:', err);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Checkout failed: ' + err.message
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Checkout failed: ' + err.message });
             });
         });
     }

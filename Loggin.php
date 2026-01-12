@@ -24,12 +24,21 @@ if ($Email === '' || $Password === '') {
     exit();
 }
 
-$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+$dbHost = getenv('DB_HOST') ?: 'localhost';
+$dbPort = (int)(getenv('DB_PORT') ?: 3306);
+$dbUser = getenv('DB_USER') ?: 'root';
+$dbPass = getenv('DB_PASS');
+if ($dbPass === false) { $dbPass = ''; }
+$dbName = getenv('DB_NAME') ?: 'resturent';
+
+$con = @new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
 if ($con->connect_error) {
-    die("Connection failed: " . $con->connect_error);
+    $err = addslashes($con->connect_error);
+    echo "<script>alert('Database connection failed: {$err}');window.location.href='Loggin.html';</script>";
+    exit();
 }
 
-// Check if it's admin login first
+// Try admin login first
 $stmt = $con->prepare("SELECT adminusername, adminpassword FROM admin WHERE adminusername = ?");
 $stmt->bind_param("s", $Email);
 $stmt->execute();
@@ -40,7 +49,7 @@ if ($adminResult->num_rows === 1) {
 
     if ($Password === $adminRow['adminpassword']) {
         $_SESSION['admin_username'] = $adminRow['adminusername'];
-        header("Location: dashboard.html");
+        header("Location: admin_dashboard.php");
         exit();
     } else {
         echo "
@@ -51,7 +60,7 @@ if ($adminResult->num_rows === 1) {
         Swal.fire({
             icon: 'error',
             title: 'Login Failed',
-            text: 'Incorrect admin password.',
+            text: 'Incorrect password.',
             confirmButtonText: 'Retry'
         }).then(() => {
             window.location.href = 'Loggin.html';
@@ -62,7 +71,7 @@ if ($adminResult->num_rows === 1) {
     }
 }
 
-// Check customer login
+// Fallback: customer login (hashed password with fallback to legacy plain text)
 $stmt = $con->prepare("SELECT email, password, name FROM customer WHERE email = ?");
 $stmt->bind_param("s", $Email);
 $stmt->execute();
@@ -70,11 +79,14 @@ $customerResult = $stmt->get_result();
 
 if ($customerResult->num_rows === 1) {
     $row = $customerResult->fetch_assoc();
+    $storedHash = $row['password'];
 
-    if ($Password === $row['password']) {
+    $valid = password_verify($Password, $storedHash) || $Password === $storedHash;
+
+    if ($valid) {
         $_SESSION['customer_name'] = $row['name'];
         $_SESSION['customer_email'] = $row['email'];
-        header("Location: home.html");
+        header("Location: home.php");
         exit();
     } else {
         echo "

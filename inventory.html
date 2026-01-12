@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management</title>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="inventory.css">
 </head>
 <body>
@@ -12,9 +13,9 @@
         <h2>Inventory Management</h2>
     </div>
         <div class="inventory-actions">
-        <a href="additem.html"><button class="btn btn-primary">Add Inventory Items</button></a>
-        <a href="order.html"><button class="btn btn-primary">Order Inventory Items</button></a>
-        <a href="updateitem.html"><button class="btn btn-secondary">Get Inventory Items</button></a>
+        <a href="admin_additem.php"><button class="btn btn-primary">Add Inventory Items</button></a>
+        <a href="admin_order.php"><button class="btn btn-primary">Order Inventory Items</button></a>
+        <a href="admin_updateitem.php"><button class="btn btn-secondary">Get Inventory Items</button></a>
     </div>
     <div class="inventory-filters">
         <div class="filter-group">
@@ -42,8 +43,8 @@
             <input type="text" id="search-bar" placeholder="Search item name...">
         </div>
     </div>
-    <div class="inventory-table" id="inventoryTable"></div>
-            <table>
+    <div class="inventory-table" id="inventoryTable">
+        <table>
             <thead>
                 <tr>
                     <th>Item ID</th>
@@ -59,7 +60,7 @@
     </div>
     
     <div>
-        <a href="dashboard.html">
+        <a href="admin_dashboard.php">
             <button class="btn btn-back">Go Back</button>
         </a>
     </div>
