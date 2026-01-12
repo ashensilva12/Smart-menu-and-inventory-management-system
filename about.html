@@ -3,95 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About | The Kings Menu</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="about.css">
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container header-container">
             <a href="#" class="logo">The Kings<span>Menu</span></a>
             <nav>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="menu.html">Menu</a></li>
-                    <li><a href="about.html" class="current_page">About</a></li>
-                    <li><a href="contactus.html">Contact</a></li>
+                    <li><a href="home.php">Home</a></li>
+                    <li><a href="menu.php">Menu</a></li>
+                    <li><a href="about.php" class="current_page">About</a></li>
+                    <li><a href="contactus_page.php">Contact</a></li>
                     <li>
-                        <a href="Loggin.html">
+                        <a href="user_details.php">
                             <div class="logging" id="log">
-                                <span>
-                                    <img src="pics/log.png">
-                                </span>
+                                <span><img src="pics/log.png" alt="User"></span>
                             </div>
-                        </a>   
+                        </a>
                     </li>
                 </ul>
             </nav>
         </div>
     </header>
-    <!-- About Section -->
-    <section class="about-section">
-    <div class="container">
-         <div class="about-content">
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Our Restaurant">
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <div class="pill">About The Kings Menu</div>
+                    <h1>Crafted flavors, delivered with modern ease.</h1>
+                    <p>From a five-table family spot to a digital-first restaurant, we blend warm hospitality with tech that keeps every dish fresh, fast, and flawlessly presented.</p>
+                    <div class="hero-actions">
+                        <a class="btn primary" href="menu.php">View the menu</a>
+                        <a class="btn ghost" href="contactus_page.php">Talk to us</a>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <h3>What drives us</h3>
+                    <p>Seasonal ingredients, inventive plates, and service that feels like home.</p>
+                    <ul class="hero-points">
+                        <li><span>•</span>Daily sourcing from trusted growers</li>
+                        <li><span>•</span>Live digital menu with real-time availability</li>
+                        <li><span>•</span>Chefs blending tradition with bold ideas</li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="about-text">
-            <h2>Our Story</h2>
-            <p>Founded in 2010, The Kings Menu began as a small family-owned restaurant with a passion for creating exceptional dining experiences. What started as a humble kitchen with just five tables has grown into one of the most beloved dining destinations in the city.</p>
-            <p>Our commitment to quality ingredients, innovative recipes, and outstanding service has remained unchanged throughout our journey. We take pride in our farm-to-table approach, working directly with local farmers and producers to bring you the freshest flavors.</p>
-            <p>The Kings Menu is more than just a restaurant - it's a place where memories are made, where every meal is an occasion, and where our guests become part of our extended family.</p>
-        </div>
-    </div>
-    <div class="about-content reverse">
-        <div class="about-text">
-        <h2>Our Philosophy</h2>
-        <p>At The Kings Menu, we believe that great food starts with great ingredients. That's why we source only the finest, seasonal produce and work with trusted suppliers who share our commitment to quality and sustainability.</p>
-        <p>Our chefs combine traditional techniques with modern creativity to deliver dishes that are both familiar and exciting. Every plate that leaves our kitchen is prepared with care, attention to detail, and most importantly, love.</p>
-        <p>We're proud to offer our innovative digital menu system that ensures you always see up-to-date availability and can enjoy a seamless dining experience from start to finish.</p>
-    </div>
-    <div class="about-image">
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Our Kitchen">
-            </div>
-        </div>
-    </div>
         </section>
 
-    <!-- Team Section -->
-    <section class="team-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Meet Our Team</h2>
-                <p>The talented individuals who make The Kings Menu special</p>
+        <section class="stats">
+            <div class="container stats-grid">
+                <div class="stat">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Years of flavor and craft</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">40+</div>
+                    <div class="stat-label">Signature dishes perfected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Digital ordering confidence</div>
+                </div>
             </div>
+        </section>
+
+        <section class="container">
+            <div class="split">
+                <div class="panel">
+                    <h2>Our Story</h2>
+                    <p>Started in 2010 with five tables and a single grill, The Kings Menu grew on word-of-mouth and a promise: every guest leaves with a favorite story to tell.</p>
+                    <p>Today we pair that same hospitality with a smart digital menu, letting you see what is fresh, place orders quickly, and savor more time together.</p>
+                    <div class="chips">
+                        <span class="chip">Farm to table</span>
+                        <span class="chip">Digital-first</span>
+                        <span class="chip">Family-run heart</span>
+                    </div>
+                </div>
+                <div class="panel image-card">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1350&q=80" alt="Kitchen in action">
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="section-title">What we stand for</div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <h3>Craft over trend</h3>
+                    <p>Tech helps us move fast, but flavor comes from slow, careful preparation and classic technique.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Fresh and fearless</h3>
+                    <p>Daily sourcing and seasonal menus keep ingredients vibrant while our chefs explore bold pairings.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Care in every step</h3>
+                    <p>From your first tap to the last bite, we keep you informed, comfortable, and delighted.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Community first</h3>
+                    <p>We support local growers and partner with neighbors to keep our table rooted in the community.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container team-section">
+            <div class="section-title">Meet the team</div>
             <div class="team-members">
                 <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Chef Michael">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=640&q=80" alt="Chef Michael">
                     <h3>Michael Johnson</h3>
-                    <p>Head Chef</p>
-                    <p>With over 20 years of culinary experience, Chef Michael brings creativity and precision to every dish.</p>
+                    <div class="role">Head Chef</div>
+                    <p>Twenty years of kitchens, balancing precision with playful, memorable plates.</p>
                 </div>
                 <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Sarah">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=640&q=80" alt="Sarah">
                     <h3>Sarah Williams</h3>
-                    <p>Restaurant Manager</p>
-                    <p>Sarah ensures every guest receives the warm, personalized service we're known for.</p>
+                    <div class="role">Restaurant Manager</div>
+                    <p>Guides the floor with warmth and keeps service seamless from door to dessert.</p>
                 </div>
                 <div class="team-member">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="David">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=640&q=80" alt="David">
                     <h3>David Chen</h3>
-                    <p>Sommelier</p>
-                    <p>David's expert wine pairings elevate every meal to a new level of enjoyment.</p>
-                    </div>
+                    <div class="role">Sommelier</div>
+                    <p>Pairs every dish with the right pour and curates our evolving cellar.</p>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <section class="container">
+            <div class="cta">
+                <h3>Come hungry, leave inspired.</h3>
+                <p>Visit us, order ahead, or plan your next gathering with the team. We will make it special.</p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="menu.php">Order now</a>
+                    <a class="btn ghost" href="contactus_page.php">Book a table</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; 2020-2025 The Kings Menu Pvt Ltd</p>
+        <p>&copy; 2020-2026 The Kings Menu Pvt Ltd</p>
     </footer>
-
 </body>
 </html>
