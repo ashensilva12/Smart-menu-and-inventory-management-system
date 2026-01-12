@@ -1,92 +1,55 @@
 <?php
-  $itemID = $_POST['itemID'] ?? '';
-  $itemname = $_POST['itemname'] ?? '';
-  $category = $_POST['category'] ?? '';
+require_once __DIR__ . '/session_check.php';
+  $itemID = trim($_POST['itemID'] ?? '');
+  $itemname = trim($_POST['itemname'] ?? '');
+  $category = trim($_POST['category'] ?? '');
   $stock = $_POST['stock'] ?? '';
-  $unit = $_POST['unit'] ?? '';
+  $unit = trim($_POST['unit'] ?? '');
 
-$cri1 = $itemID != "";
-$cri2 = $itemname != "";
-$cri3 = $category != "";
-$cri4 = $stock != "";
-$cri5 = $unit != "";
+$valid = $itemID !== '' && $itemname !== '' && $category !== '' && $unit !== '' && is_numeric($stock);
 
-if (!$cri1 || !$cri2 || !$cri3 || !$cri4 || !$cri5) exit();
+if (!$valid) {
+    header('Location: admin_additem.php?status=invalid');
+    exit();
+}
 
-$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+$stock = (float)$stock;
 
-$data = "INSERT INTO invitems(itemID, itemName, category, currentStock, unit, status) 
-         VALUES('$itemID', '$itemname', '$category', '$stock', '$unit', 'in-stock')";
+// Default XAMPP MySQL uses root with no password; change here if you set one
+$con = new mysqli('localhost', 'root', '', 'resturent');
 
-$check = "SELECT * FROM invitems WHERE category='$category' AND itemID='$itemID'";
-$sql = $con->query($check);
+// Insert or update existing item atomically
+$check = $con->prepare("SELECT currentStock FROM invitems WHERE category = ? AND itemID = ? LIMIT 1");
+$check->bind_param('ss', $category, $itemID);
+$check->execute();
+$result = $check->get_result();
 
-// Output full HTML for SweetAlert to work:
-echo "<!DOCTYPE html>
-<html lang='en'>
-<head>
-  <meta charset='UTF-8'>
-  <title>Processing...</title>
-  <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-</head>
-<body>";
+$sql = $result;
 if ($sql && $sql->num_rows == 1) {
     $row = $sql->fetch_assoc();
-    $currentStock = (int)$row['currentStock'];
+    $currentStock = (float)$row['currentStock'];
     $newStock = $currentStock + $stock;
-    $update = "UPDATE invitems SET currentStock='$newStock' WHERE category='$category' AND itemID='$itemID'";
-    if ($con->query($update) === true) {
-        echo "
-        <script>
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Item Updated Successfully',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            window.location.href = 'additem.html';
-          });
-        </script>";
+    $update = $con->prepare("UPDATE invitems SET currentStock = ? WHERE category = ? AND itemID = ?");
+    $update->bind_param('dss', $newStock, $category, $itemID);
+    if ($update->execute()) {
+        header('Location: admin_additem.php?status=updated');
+        exit();
         } else {
-        echo "
-        <script>
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Failed to update item.',
-            confirmButtonText: 'Back'
-          }).then(() => {
-            window.location.href = 'additem.html';
-          });
-        </script>";
+        header('Location: admin_additem.php?status=update_error');
+        exit();
             }
+    $update->close();
 } else {
-    if ($con->query($data) === true) {
-        echo "
-        <script>
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Item Added Successfully',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            window.location.href = 'additem.html';
-          });
-        </script>";
+    $insert = $con->prepare("INSERT INTO invitems(itemID, itemName, category, currentStock, unit, status) VALUES (?, ?, ?, ?, ?, 'In Stock')");
+    $insert->bind_param('sssds', $itemID, $itemname, $category, $stock, $unit);
+    if ($insert->execute()) {
+        header('Location: admin_additem.php?status=added');
+        exit();
     } else {
-        echo "
-        <script>
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong, try again.',
-            confirmButtonText: 'Back'
-          }).then(() => {
-            window.location.href = 'additem.html';
-          });
-        </script>";
+        header('Location: admin_additem.php?status=add_error');
+        exit();
     }
+    $insert->close();
 }
-echo "</body></html>";
 $con->close();
 ?>
