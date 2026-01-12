@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Send direct dashboard.html hits to admin login
+RewriteRule ^dashboard\.html$ /admin_login.html [L,R=302]
+
+# Protect key pages by routing through guard.php
+RewriteCond %{REQUEST_URI} !/Loggin\.html$
+RewriteCond %{REQUEST_URI} !/register\.html$
+RewriteCond %{REQUEST_URI} !/admin_login\.html$
+RewriteRule ^(home|menu|about|contactus)\.html$ /guard.php?file=$1 [L]
+
+# Fallback: redirect other .html to login
+RewriteCond %{REQUEST_URI} !/Loggin\.html$
+RewriteCond %{REQUEST_URI} !/register\.html$
+RewriteCond %{REQUEST_URI} !/admin_login\.html$
+RewriteRule \.html$ /Loggin.html [L,R=302]
+
+DirectoryIndex Loggin.html
