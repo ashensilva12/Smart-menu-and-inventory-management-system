@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Inventory Item</title>
+    <link rel="stylesheet" href="theme.css" />
     <!-- Your existing CSS -->
     <link rel="stylesheet" href="additem.css" />
 
@@ -14,11 +15,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <header class="utility-header">
+        <div class="utility-brand">The Kings Menu</div>
+        <nav class="utility-links">
+            <a href="admin_dashboard.php">Dashboard</a>
+            <a href="admin_inventory.php">Inventory</a>
+        </nav>
+    </header>
         <div class="modal" id="add-inventory-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Add New Inventory Item</h3>
-                <a href="inventory.html">
+                <a href="admin_inventory.php">
                     <button class="close-modal">&times;</button>
                 </a>
             </div>
