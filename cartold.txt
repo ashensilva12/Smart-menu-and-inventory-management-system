@@ -1,0 +1,60 @@
+<?php
+session_start();
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+header('Content-Type: application/json');
+
+// Database connection
+$con = new mysqli('localhost:6368', 'root', '1234', 'resturent');
+
+if ($con->connect_error) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Database connection failed: " . $con->connect_error
+    ]);
+    exit;
+}
+
+// Check if customer_name session exists
+if (!isset($_SESSION['customer_name'])) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Session variable 'customer_name' is not set."
+    ]);
+    exit;
+}
+
+// Read and decode JSON POST data
+$data = json_decode(file_get_contents("php://input"), true);
+
+if ($data && isset($data['total']) && isset($data['items'])) {
+    $customer_name = $con->real_escape_string($_SESSION['customer_name']);
+    $items = intval($data['items']);
+    $total = floatval($data['total']);
+
+    $sql = "INSERT INTO orders (customer, items, total) VALUES ('$customer_name', $items, $total)";
+
+    if ($con->query($sql)) {
+        echo json_encode([
+            "success" => true,
+            "message" => "Order saved successfully. Check your email for the bill."
+        ]);
+    } else {
+        echo json_encode([
+            "success" => false,
+            "message" => "Database error: " . $con->error,
+            "sql" => $sql
+        ]);
+    }
+} else {
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid input data."
+    ]);
+}
+
+$con->close();
+
