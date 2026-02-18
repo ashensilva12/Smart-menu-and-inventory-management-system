@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/session_check.php';
-    require 'vendor/autoload.php';
+require_once __DIR__ . '/smtp_contact.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
@@ -13,20 +13,11 @@ require_once __DIR__ . '/session_check.php';
     $mail = new PHPMailer(true);
 
         try {
-        // SMTP configuration
-        $mail->isSMTP();
-        $mail->Host       = 'smtp-relay.brevo.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = '93b60b001@smtp-brevo.com';           // Your Gmail
-        $mail->Password   = 'U0ES13KZ4mALxV5g';             // Gmail App Password
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
-
-
-        
+        // SMTP configuration (contact-only)
+        apply_contact_smtp_settings($mail);
         // Recipients
-        $mail->setFrom('admin@ashenlakshitha.online', 'Kings Menu Contact');
-        $mail->addAddress('ashenlakshitha12@gmail.com');    // Admin email
+        $mail->addAddress(CONTACT_SMTP_TO);    // Admin inbox for contact form
+        $mail->addReplyTo($email, $name);      // Allow direct replies
 
         // Content
         $mail->isHTML(true);
