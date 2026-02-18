@@ -6,6 +6,7 @@
     <title>Admin Dashboard | The Kings Menu</title>
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Admin Header -->
@@ -35,6 +36,8 @@
                 <li><a href="admin_inventory.php"> Inventory</a></li>
                 <li><a href="admin_newitem.php"> Add Items</a></li>
                 <li><a href="admin_deletemenu.php">Delete Menu Items</a></li>
+                <li><a href="admin_deliveries.php">Deliveries</a></li>
+                <li><a href="admin_kitchen.php">Kitchen</a></li>
             </ul>
         </nav>
     </div>
@@ -62,17 +65,7 @@
                     <button class="btn small" id="refresh-btn">Refresh</button>
                     <button class="btn small" id="export-btn">Export CSV</button>
                     <button type="button" id="submitBtn" class="btn btnprimary">Clear previous orders</button>
-                    <div class="bulk-actions">
-                        <label for="bulk-status">Bulk status</label>
-                        <select id="bulk-status">
-                            <option value="">Choose…</option>
-                            <option value="placed">Placed</option>
-                            <option value="preparing">Preparing</option>
-                            <option value="ready">Ready</option>
-                            <option value="completed">Completed</option>
-                        </select>
-                        <button class="btn small" id="bulk-apply">Apply</button>
-                    </div>
+                    <!-- Bulk status control removed per request -->
                 </div>
             </div>
 
@@ -132,8 +125,6 @@
     const exportBtn = document.getElementById('export-btn');
     const clearBtn = document.getElementById('submitBtn');
     const selectAll = document.getElementById('select-all');
-    const bulkSelect = document.getElementById('bulk-status');
-    const bulkApply = document.getElementById('bulk-apply');
     const alertStrip = document.getElementById('alert-strip');
     const statusStack = document.getElementById('status-stack');
     const statusLegend = document.getElementById('status-legend');
@@ -194,7 +185,11 @@
         renderInsights(rows);
     }
 
+    let isLoading = false;
+
     function loadOrders() {
+        if (isLoading) return;
+        isLoading = true;
         tbody.innerHTML = '<tr><td colspan="8">Loading...</td></tr>';
         fetch('orders_list.php')
             .then(r => r.json())
@@ -206,7 +201,8 @@
             .catch(err => {
                 console.error(err);
                 tbody.innerHTML = `<tr><td colspan="8">${err.message}</td></tr>`;
-            });
+            })
+            .finally(() => { isLoading = false; });
     }
 
     function updateStatus(orderId, status) {
@@ -230,24 +226,6 @@
             alert('Failed to update status: ' + err.message);
             loadOrders();
             throw err;
-        });
-    }
-
-    function bulkUpdate() {
-        const target = bulkSelect.value;
-        if (!target) {
-            alert('Pick a bulk status first');
-            return;
-        }
-        const ids = Array.from(selected);
-        if (!ids.length) {
-            alert('Select at least one order');
-            return;
-        }
-        bulkApply.disabled = true;
-        const updates = ids.map(id => updateStatus(id, target));
-        Promise.allSettled(updates).finally(() => {
-            bulkApply.disabled = false;
         });
     }
 
@@ -316,19 +294,40 @@
         URL.revokeObjectURL(url);
     }
 
-    // Clear orders button
+    // Clear orders button with SweetAlert2
     clearBtn.addEventListener('click', () => {
-        if (!confirm('Are you sure you want to clear all previous orders?')) return;
-        fetch('dashboard.php?clear=1')
-            .then(r => r.text())
-            .then(msg => {
-                alert(msg);
-                loadOrders();
-            })
-            .catch(err => {
-                console.error(err);
-                alert('Failed to clear orders.');
-            });
+        Swal.fire({
+            title: 'Clear all orders?',
+            text: 'This removes every order and status history.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, clear',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            Swal.showLoading();
+            fetch('dashboard.php?clear=1')
+                .then(r => r.text())
+                .then(msg => {
+                    const isOk = msg.toLowerCase().includes('cleared');
+                    Swal.fire({
+                        icon: isOk ? 'success' : 'error',
+                        title: isOk ? 'Cleared' : 'Failed',
+                        text: msg || (isOk ? 'Orders cleared.' : 'Failed to clear orders.')
+                    });
+                    loadOrders();
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed to clear',
+                        text: err.message || 'Request failed.'
+                    });
+                });
+        });
     });
 
     searchInput.addEventListener('input', render);
@@ -343,7 +342,9 @@
         });
         syncSelectAll();
     });
-    bulkApply.addEventListener('click', bulkUpdate);
+
+    // Auto-refresh dashboard every 15s to pull new orders without manual reload
+    setInterval(() => { if (!isLoading) loadOrders(); }, 15000);
 
     loadOrders();
     </script>
