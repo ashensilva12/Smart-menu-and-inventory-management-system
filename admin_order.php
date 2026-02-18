@@ -1,12 +1,12 @@
 <?php
-session_start();
-if (!isset($_SESSION['admin_username'])) {
-    header('Location: admin_login.html');
+require_once __DIR__ . '/admin_only.php';
+header('Content-Type: text/html; charset=UTF-8');
+
+$orderPage = __DIR__ . '/order.html';
+if (!is_readable($orderPage)) {
+    http_response_code(500);
+    echo '<!DOCTYPE html><html><body><h2>Order page missing</h2><p>File not found: order.html</p></body></html>';
     exit();
 }
-// Prevent cached access after logout
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
-header('Expires: 0');
 
-readfile(__DIR__ . '/order.html');
+readfile($orderPage);
