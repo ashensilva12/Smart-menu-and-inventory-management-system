@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/session_check.php';
-session_start();
+require_once __DIR__ . '/smtp_config.php';
 
 // === SweetAlert2 HTML wrapper (non-destructive) ===
 // Runs ONLY for non-JSON requests (direct browser visit or normal form POST).
@@ -368,30 +368,42 @@ try {
     $pdfFile = tempnam($tempDir, 'bill_') . '.pdf';
     file_put_contents($pdfFile, $dompdf->output());
 
-    // -------- Send email (PHPMailer) --------
-    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+    // -------- Send email (PHPMailer) with fallback and non-fatal errors --------
+    $emailError = null;
     try {
-        $mail->isSMTP();
-        $mail->Host       = '';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = '';
-        $mail->Password   = '';
-        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
+      $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+      apply_smtp_settings($mail);
+      $mail->addAddress($customerEmail);
+      $mail->addReplyTo(SMTP_FROM, SMTP_FROM_NAME);
 
-        $mail->setFrom('', 'The Kings Menu');
+      $mail->isHTML(true);
+      $mail->Subject = 'Your Order Bill - The Kings Menu';
+      $mail->Body    = '<p>Thank you for your order!</p><p>Your bill is attached.</p>';
+      $mail->addAttachment($pdfFile, 'OrderBill.pdf');
+
+      $mail->send();
+    } catch (Exception $primaryEx) {
+      // If port 587 is blocked, try SMTPS/465 once before giving up
+      $emailError = $primaryEx->getMessage();
+      try {
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+        apply_smtp_settings($mail);
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465;
         $mail->addAddress($customerEmail);
-
+        $mail->addReplyTo(SMTP_FROM, SMTP_FROM_NAME);
         $mail->isHTML(true);
         $mail->Subject = 'Your Order Bill - The Kings Menu';
         $mail->Body    = '<p>Thank you for your order!</p><p>Your bill is attached.</p>';
         $mail->addAttachment($pdfFile, 'OrderBill.pdf');
-
         $mail->send();
-    } catch (Exception $e) {
-        throw new Exception("Email sending failed: " . $e->getMessage());
+        $emailError = null; // fallback succeeded
+      } catch (Exception $fallbackEx) {
+        $emailError .= ' | Fallback failed: ' . $fallbackEx->getMessage();
+        log_error('Email sending failed: ' . $emailError);
+      }
     } finally {
-        if (file_exists($pdfFile)) unlink($pdfFile);
+      if (file_exists($pdfFile)) unlink($pdfFile);
     }
 
     // -------- Save order to MySQL (lookup name from `customer`) --------
@@ -399,12 +411,13 @@ try {
     //   customer(name VARCHAR(50) PK, email VARCHAR(70), password VARCHAR(20))
     //   orders(orderID INT AI PK, customer VARCHAR(50), items INT, total DOUBLE)
 
-    $DB_HOST = 'localhost:6368';
+    $DB_HOST = '127.0.0.1';
+    $DB_PORT = 3306; // Default XAMPP MySQL port
     $DB_USER = 'root';
-    $DB_PASS = '1234';
+    $DB_PASS = '';
     $DB_NAME = 'resturent';
 
-    $mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+    $mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
     if ($mysqli->connect_errno) {
         log_error("DB connect error: " . $mysqli->connect_error);
     } else {
@@ -453,9 +466,13 @@ try {
     }
 
     // -------- Success JSON (menu.html will show SweetAlert) --------
+    $message = $emailError
+        ? "Order placed successfully, but email could not be sent (" . $emailError . ")"
+        : "Order placed successfully! Bill sent to $customerEmail";
+
     echo json_encode([
       "success" => true,
-      "message" => "Order placed successfully! Bill sent to $customerEmail",
+      "message" => $message,
       "orderId" => isset($orderId) ? $orderId : null,
       "status" => 'placed'
     ]);
