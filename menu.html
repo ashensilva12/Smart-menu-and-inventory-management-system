@@ -27,6 +27,50 @@
             .modal .btn-primary { background: #111827; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; }
             .modal .btn-secondary { background: #e5e7eb; color: #111; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; }
             .helper-text { font-size: 12px; color: #6b7280; }
+
+            /* Floating order status shortcut */
+            .order-status-fab {
+                position: fixed;
+                right: 18px;
+                bottom: 100px;
+                width: 62px;
+                height: 62px;
+                border-radius: 18px;
+                background: linear-gradient(135deg, #111827, #1f2937);
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 14px 30px rgba(0,0,0,0.28), 0 6px 14px rgba(0,0,0,0.16);
+                z-index: 9400;
+                cursor: pointer;
+                transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+                text-decoration: none;
+                overflow: visible;
+                border: 1px solid rgba(255,255,255,0.08);
+            }
+            .order-status-fab:hover {
+                transform: translateY(-3px) scale(1.02);
+                box-shadow: 0 18px 36px rgba(0,0,0,0.32), 0 8px 18px rgba(0,0,0,0.18);
+                background: linear-gradient(135deg, #0f172a, #111827);
+            }
+            .order-status-fab span {
+                font-size: 24px;
+                line-height: 1;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+            }
+            .order-status-fab small {
+                position: absolute;
+                bottom: -30px;
+                background:#0f172a;
+                color:#fff;
+                padding:5px 12px;
+                border-radius: 999px;
+                font-size:11px;
+                white-space:nowrap;
+                box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+                letter-spacing:0.3px;
+            }
     </style>
 </head>
 <body>
@@ -164,6 +208,24 @@
     <footer>
         <p>&copy; 2020-2025 The Kings Menu Pvt Ltd</p>
     </footer>
+
+    <!-- Floating order-status entry point for customers -->
+    <a href="user_order_status.php" class="order-status-fab" aria-label="Track my order">
+        <span>🚚</span>
+        <small>My Order</small>
+    </a>
+
+    <script>
+    // Ensure the floating button always navigates, even if other handlers exist
+    (function() {
+        const orderFab = document.querySelector('.order-status-fab');
+        if (!orderFab) return;
+        orderFab.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = orderFab.href;
+        });
+    })();
+    </script>
 
     <script>
     // Cart + checkout state
