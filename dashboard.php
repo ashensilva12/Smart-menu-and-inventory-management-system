@@ -56,11 +56,46 @@ if (!$tableExists) {
 
 // Clear orders when requested (admin UI)
 if (isset($_GET['clear'])) {
-    if ($con->query("TRUNCATE TABLE orders") === true) {
-        echo "Orders cleared";
-    } else {
-        echo "Failed to clear orders";
+    // Check if order_items table exists (FK child)
+    $hasOrderItems = false;
+    if ($stmt = $con->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = 'order_items'")) {
+        $stmt->bind_param('s', $dbName);
+        if ($stmt->execute()) {
+            $stmt->bind_result($cnt);
+            if ($stmt->fetch() && $cnt > 0) {
+                $hasOrderItems = true;
+            }
+        }
+        $stmt->close();
     }
+
+    $statusFile = __DIR__ . '/order_status.json';
+
+    try {
+        $con->begin_transaction();
+        $con->query("SET FOREIGN_KEY_CHECKS=0");
+        if ($hasOrderItems) {
+            if ($con->query("TRUNCATE TABLE order_items") === false) {
+                throw new Exception('Failed to truncate order_items: ' . $con->error);
+            }
+        }
+        if ($con->query("TRUNCATE TABLE orders") === false) {
+            throw new Exception('Failed to truncate orders: ' . $con->error);
+        }
+        $con->query("SET FOREIGN_KEY_CHECKS=1");
+        $con->commit();
+
+        if (file_exists($statusFile)) {
+            @unlink($statusFile);
+        }
+        echo "Orders cleared";
+    } catch (Exception $e) {
+        $con->rollback();
+        // Restore FK checks just in case
+        $con->query("SET FOREIGN_KEY_CHECKS=1");
+        echo "Failed to clear orders: " . htmlspecialchars($e->getMessage());
+    }
+
     $con->close();
     exit();
 }
