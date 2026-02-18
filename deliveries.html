@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliveries | Admin</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Align visuals with the dark admin dashboard theme */
+        body {
+            background: radial-gradient(circle at 20% 20%, rgba(124, 212, 244, 0.08), transparent 24%),
+                        radial-gradient(circle at 80% 0%, rgba(230, 57, 70, 0.12), transparent 30%),
+                        var(--dark);
+            color: #e5e7eb;
+        }
+        header.admin-header { position:sticky; top:0; z-index:10; }
+        .page { display:grid; grid-template-columns: 280px 1fr; min-height:100vh; }
+        .content { padding:24px; background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(12, 18, 32, 0.9)); }
+        .card { background:#121c31; border:1px solid #1f2937; border-radius:12px; padding:16px; box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32); margin-bottom:18px; }
+        table { width:100%; border-collapse:collapse; color:#e5e7eb; }
+        th, td { padding:10px 8px; text-align:left; border-bottom:1px solid #1f2937; }
+        th { font-size:13px; letter-spacing:0.02em; text-transform:uppercase; color:#cbd5e1; background:#0f172a; }
+        .pill { display:inline-flex; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; }
+        .pill.pending { background:rgba(234, 179, 8, 0.12); color:#facc15; border:1px solid #854d0e; }
+        .pill.out_for_delivery { background:rgba(56, 189, 248, 0.12); color:#7cd4f4; border:1px solid #164e63; }
+        .pill.delivered { background:rgba(16, 185, 129, 0.12); color:#34d399; border:1px solid #065f46; }
+        .pill.cancelled { background:rgba(230, 57, 70, 0.12); color:#fca5a5; border:1px solid #7f1d1d; }
+        .flex { display:flex; gap:12px; }
+        .flex-between { display:flex; justify-content:space-between; align-items:center; }
+        .btn { border:none; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer; box-shadow: 0 8px 22px rgba(0,0,0,0.25); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-primary { background: var(--primary); color:#fff; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(230, 57, 70, 0.35); }
+        .btn-secondary { background: rgba(255,255,255,0.08); color:#e5e7eb; border:1px solid #1f2937; }
+        input, select { width:100%; padding:10px 12px; border:1px solid #1f2937; border-radius:10px; background:#0f172a; color:#e5e7eb; }
+        input::placeholder, select option { color:#9ca3af; }
+        .hint { color:#9ca3af; font-size:13px; margin-top:4px; }
+    </style>
+</head>
+<body>
+    <main class="content" style="padding-top:90px; max-width:1200px; margin:0 auto;">
+        <div class="card" style="position:fixed; top:16px; left:50%; transform:translateX(-50%); width:calc(100% - 48px); max-width:1200px;">
+            <div class="flex-between">
+                <div>
+                    <h2 style="margin:0;">Deliveries</h2>
+                    <div class="hint">Assign orders and manage delivery staff</div>
+                </div>
+                <a class="btn btn-secondary" href="admin_dashboard.php">Back to Dashboard</a>
+            </div>
+        </div>
+
+            <div class="card">
+                <div class="flex-between">
+                    <div>
+                        <h2 style="margin:0;">Delivery Staff</h2>
+                        <div class="hint">Manage drivers who can log in and update deliveries.</div>
+                    </div>
+                </div>
+                <div class="flex" style="margin-top:14px;">
+                    <div style="flex:1;">
+                        <label>Name</label>
+                        <input id="staff-name" placeholder="Full name">
+                    </div>
+                    <div style="width:180px;">
+                        <label>Phone</label>
+                        <input id="staff-phone" placeholder="07x xxx xxxx">
+                    </div>
+                    <div style="width:180px;">
+                        <label>Username</label>
+                        <input id="staff-username" placeholder="driver2">
+                    </div>
+                    <div style="width:180px;">
+                        <label>Password</label>
+                        <input id="staff-password" type="password" placeholder="Set password">
+                    </div>
+                    <div style="width:130px; align-self:end;">
+                        <button class="btn btn-primary" id="add-staff">Add</button>
+                    </div>
+                </div>
+                <div class="hint">Default demo account: driver1 / driver123</div>
+                <table style="margin-top:16px;">
+                    <thead>
+                        <tr><th>ID</th><th>Name</th><th>Username</th><th>Phone</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="staff-body"><tr><td colspan="5">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="flex-between">
+                    <div>
+                        <h2 style="margin:0;">Assign Orders</h2>
+                        <div class="hint">Pick a driver for orders not yet delivered.</div>
+                    </div>
+                    <div class="hint" id="orders-count"></div>
+                </div>
+                <div style="overflow-x:auto; margin-top:12px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Address / Contact</th>
+                                <th>Total</th>
+                                <th>Assign Driver</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="open-body"><tr><td colspan="7">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="flex-between">
+                    <div>
+                        <h2 style="margin:0;">Pickup Orders</h2>
+                        <div class="hint">Customers collect these in person; no driver assignment.</div>
+                    </div>
+                    <div class="hint" id="pickup-count"></div>
+                </div>
+                <div style="overflow-x:auto; margin-top:12px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pickup-body"><tr><td colspan="5">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="flex-between">
+                    <div>
+                        <h2 style="margin:0;">Delivered Orders</h2>
+                        <div class="hint">Completed deliveries with driver name and delivered time.</div>
+                    </div>
+                    <div class="hint" id="delivered-count"></div>
+                </div>
+                <div style="overflow-x:auto; margin-top:12px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Driver</th>
+                                <th>Delivered At</th>
+                                <th>Contact</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="delivered-body"><tr><td colspan="6">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+    </main>
+
+    <script>
+    const staffBody = document.getElementById('staff-body');
+    const openBody = document.getElementById('open-body');
+    const deliveredBody = document.getElementById('delivered-body');
+    const pickupBody = document.getElementById('pickup-body');
+    const ordersCount = document.getElementById('orders-count');
+    const deliveredCount = document.getElementById('delivered-count');
+    const pickupCount = document.getElementById('pickup-count');
+
+    let staff = [];
+    let orders = [];
+
+    function pill(status) {
+        const cls = status || 'pending';
+        return `<span class="pill ${cls}">${cls.replace(/_/g,' ')}</span>`;
+    }
+
+    async function loadStaff() {
+        try {
+            const res = await fetch('delivery_api.php?action=list_staff');
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Failed to load staff');
+            staff = data.staff || [];
+            renderStaff();
+        } catch (err) {
+            staffBody.innerHTML = `<tr><td colspan="5">${err.message}</td></tr>`;
+        }
+    }
+
+    function renderStaff() {
+        if (!staff.length) {
+            staffBody.innerHTML = '<tr><td colspan="5">No staff yet.</td></tr>';
+            return;
+        }
+        staffBody.innerHTML = staff.map(s => `
+            <tr>
+                <td>${s.id}</td>
+                <td>${s.name}</td>
+                <td>${s.username}</td>
+                <td>${s.phone || ''}</td>
+                <td>${s.status || 'active'}</td>
+            </tr>
+        `).join('');
+    }
+
+    let ordersLoading = false;
+
+    async function loadOrders() {
+        if (ordersLoading) return;
+        ordersLoading = true;
+        try {
+            const res = await fetch('delivery_api.php?action=list_orders');
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Failed to load orders');
+            orders = data.orders || [];
+            renderOrders();
+        } catch (err) {
+            openBody.innerHTML = `<tr><td colspan="7">${err.message}</td></tr>`;
+            deliveredBody.innerHTML = `<tr><td colspan="6">${err.message}</td></tr>`;
+        } finally {
+            ordersLoading = false;
+        }
+    }
+
+    function renderOrders() {
+        const deliveryOrders = orders.filter(o => (o.orderType || '').toLowerCase() !== 'pickup');
+        const pickupOrders = orders.filter(o => (o.orderType || '').toLowerCase() === 'pickup');
+
+        const open = deliveryOrders.filter(o => (o.delivery && o.delivery.status) ? o.delivery.status !== 'delivered' : true);
+        const done = deliveryOrders.filter(o => (o.delivery && o.delivery.status) === 'delivered');
+
+        ordersCount.textContent = `${open.length} to assign`;
+        deliveredCount.textContent = `${done.length} delivered`;
+        pickupCount.textContent = `${pickupOrders.length} pickup`;
+
+        if (!open.length) {
+            openBody.innerHTML = '<tr><td colspan="7">No pending deliveries.</td></tr>';
+        } else {
+            openBody.innerHTML = open.map(o => {
+                const delivery = o.delivery || {};
+                const selected = delivery.staffId ? Number(delivery.staffId) : '';
+                const options = ['<option value="">Unassigned</option>']
+                    .concat(staff.map(s => `<option value="${s.id}" ${Number(selected) === Number(s.id) ? 'selected' : ''}>${s.name}</option>`))
+                    .join('');
+                const contact = [o.address, o.phone, o.email].filter(Boolean).join('<br>');
+                return `
+                    <tr data-id="${o.orderID}">
+                        <td>#${o.orderID}</td>
+                        <td>${o.customer || 'Guest'}</td>
+                        <td>${o.orderType || 'Pickup'}</td>
+                        <td style="max-width:260px;">${contact || '—'}</td>
+                        <td>Rs.${Number(o.total || 0).toFixed(2)}</td>
+                        <td>
+                            <select class="assign-select">${options}</select>
+                        </td>
+                        <td>${delivery.status ? pill(delivery.status) : pill('pending')}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            openBody.querySelectorAll('.assign-select').forEach(sel => {
+                sel.addEventListener('change', () => {
+                    const row = sel.closest('tr');
+                    const orderId = Number(row.dataset.id);
+                    const staffId = Number(sel.value || 0);
+                    assignOrder(orderId, staffId, sel);
+                });
+            });
+        }
+
+        if (!done.length) {
+            deliveredBody.innerHTML = '<tr><td colspan="6">No delivered orders yet.</td></tr>';
+        } else {
+            deliveredBody.innerHTML = done.map(o => {
+                const delivery = o.delivery || {};
+                const contact = [o.address, o.phone, o.email].filter(Boolean).join('<br>');
+                const when = delivery.updatedAt ? new Date(delivery.updatedAt).toLocaleString() : '—';
+                return `
+                    <tr>
+                        <td>#${o.orderID}</td>
+                        <td>${o.customer || 'Guest'}</td>
+                        <td>${delivery.staffName || '—'}</td>
+                        <td>${when}</td>
+                        <td style="max-width:260px;">${contact || '—'}</td>
+                        <td>Rs.${Number(o.total || 0).toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Pickup orders (no driver assignment needed)
+        if (!pickupOrders.length) {
+            pickupBody.innerHTML = '<tr><td colspan="5">No pickup orders.</td></tr>';
+        } else {
+            pickupBody.innerHTML = pickupOrders.map(o => {
+                const contact = [o.phone, o.email].filter(Boolean).join('<br>');
+                const status = o.status || 'placed';
+                const done = status === 'completed';
+                const action = done ? '' : `<button class="btn btn-primary btn-pickup" data-id="${o.orderID}">Mark picked up</button>`;
+                return `
+                    <tr data-id="${o.orderID}">
+                        <td>#${o.orderID}</td>
+                        <td>${o.customer || 'Guest'}</td>
+                        <td>${contact || '—'}</td>
+                        <td>Rs.${Number(o.total || 0).toFixed(2)}</td>
+                        <td style="display:flex; align-items:center; gap:8px;">${pill(status)} ${action}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            pickupBody.querySelectorAll('.btn-pickup').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    markPickupComplete(id, btn);
+                });
+            });
+        }
+    }
+
+    async function markPickupComplete(orderId, btn) {
+        if (!orderId) return;
+        btn.disabled = true;
+        try {
+            const res = await fetch('order_status_api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, status: 'completed' })
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Update failed');
+            await loadOrders();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    async function assignOrder(orderId, staffId, sel) {
+        sel.disabled = true;
+        try {
+            if (!staffId) throw new Error('Pick a driver to assign');
+            const res = await fetch('delivery_api.php?action=assign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, staffId })
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Assignment failed');
+            await loadOrders();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            sel.disabled = false;
+        }
+    }
+
+    document.getElementById('add-staff').addEventListener('click', async () => {
+        const name = document.getElementById('staff-name').value.trim();
+        const phone = document.getElementById('staff-phone').value.trim();
+        const username = document.getElementById('staff-username').value.trim();
+        const password = document.getElementById('staff-password').value;
+        if (!name || !username || !password) {
+            alert('Name, username and password are required');
+            return;
+        }
+        try {
+            const res = await fetch('delivery_api.php?action=add_staff', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, username, password })
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Failed to add');
+            document.getElementById('staff-name').value = '';
+            document.getElementById('staff-phone').value = '';
+            document.getElementById('staff-username').value = '';
+            document.getElementById('staff-password').value = '';
+            await loadStaff();
+            await loadOrders();
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+
+    // Auto-refresh deliveries every 15s without page reload
+    setInterval(() => { if (!ordersLoading) loadOrders(); }, 15000);
+
+    loadStaff().then(loadOrders);
+    </script>
+</body>
+</html>
