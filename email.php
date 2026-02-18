@@ -2,6 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require_once __DIR__ . '/smtp_config.php';
+
 $autoload = __DIR__ . '/vendor/autoload.php';
 $mailerReady = true;
 if (file_exists($autoload)) {
@@ -49,15 +51,10 @@ if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
 if ($error === null) {
     $mail = new PHPMailer(true);
     try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp-relay.brevo.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = '93b60b001@smtp-brevo.com';
-        $mail->Password = 'U0ES13KZ4mALxV5g';
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
-
-        $mail->setFrom($from, $fromName ?: 'The Kings Menu');
+        apply_smtp_settings($mail);
+        if ($from !== '') {
+            $mail->setFrom($from, $fromName ?: SMTP_FROM_NAME);
+        }
         $mail->addAddress($to);
 
         $mail->isHTML(true);
