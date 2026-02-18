@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Orders | The Kings Menu</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root { --card-bg:#fff; --muted:#6b7280; --accent:#111827; }
+    body { font-family: Arial, sans-serif; background:#f5f6fb; margin:0; padding:24px; color:#111; }
+    h1 { margin:0 0 12px 0; }
+    .list { max-width: 860px; display: grid; gap: 14px; }
+    .card { background:var(--card-bg); border:1px solid #e5e7eb; border-radius:14px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,0.05); }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .status-pill { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; text-transform:capitalize; }
+    .status-placed { background:#eef2ff; color:#312e81; }
+    .status-preparing { background:#fff7ed; color:#9a3412; }
+    .status-ready { background:#ecfeff; color:#0e7490; }
+    .status-completed { background:#ecfdf3; color:#166534; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    button { border:none; border-radius:10px; padding:10px 12px; font-weight:700; cursor:pointer; }
+    .primary { background:#111827; color:#fff; }
+    .ghost { background:#f3f4f6; color:#111; }
+    .delivery { margin-top:8px; font-size:13px; color:#111; }
+    .delivery .muted { font-size:12px; }
+  </style>
+</head>
+<body>
+  <h1>My Orders</h1>
+  <p style="color:#4b5563; max-width:720px;">Logged-in orders linked to your email. You can confirm delivery once received.</p>
+
+  <div id="orders" class="list"></div>
+
+<script>
+const listEl = document.getElementById('orders');
+let sessionEmail = '';
+
+function pill(status) {
+  const cls = ['placed','preparing','ready','completed'].includes(status) ? status : 'placed';
+  return `<span class="status-pill status-${cls}">${cls}</span>`;
+}
+
+function renderOrders(data) {
+  const orders = data.orders || [];
+  sessionEmail = data.email || '';
+  if (!orders.length) {
+    listEl.innerHTML = '<div class="card"><div>No orders found for your account yet.</div></div>';
+    return;
+  }
+  listEl.innerHTML = orders.map(o => {
+    const updated = o.updatedAt ? new Date(o.updatedAt).toLocaleString() : '—';
+    const d = o.delivery || null;
+    const delivery = d ? `<div class="delivery"><div><strong>Delivery:</strong> ${d.staffName || 'Assigned'}${d.staffPhone ? ' • ' + d.staffPhone : ''}</div><div class="muted">${d.status || 'pending'}${d.updatedAt ? ' • ' + new Date(d.updatedAt).toLocaleString() : ''}${d.customerConfirmed ? ' • You confirmed' : ''}</div></div>` : '';
+    const btn = (o.status === 'completed' || (d && d.customerConfirmed)) ? '' : `<button class="primary" data-id="${o.orderId}" data-total="${o.total}">I received this</button>`;
+    return `<div class="card" data-oid="${o.orderId}">
+      <div class="top">
+        <div><div class="muted">Order #${o.orderId}</div><div style="margin-top:4px; font-size:15px;">${pill(o.status)} • ${o.orderType || 'Pickup'} • Rs.${Number(o.total||0).toFixed(2)}</div></div>
+        <div class="muted">Updated: ${updated}</div>
+      </div>
+      ${delivery}
+      <div class="actions">${btn}</div>
+    </div>`;
+  }).join('');
+
+  listEl.querySelectorAll('button[data-id]').forEach(btn => {
+    btn.addEventListener('click', () => confirmDelivered(btn.dataset.id));
+  });
+}
+
+async function loadOrders() {
+  listEl.innerHTML = '<div class="card">Loading your orders...</div>';
+  try {
+    const res = await fetch('user_orders_api.php');
+    const out = await res.json();
+    if (!out.success) throw new Error(out.message || 'Failed to load');
+    renderOrders(out);
+  } catch (err) {
+    listEl.innerHTML = `<div class="card">${err.message}</div>`;
+  }
+}
+
+async function confirmDelivered(orderId) {
+  const id = Number(orderId);
+  if (!id) return;
+  try {
+    const res = await fetch('order_status_user.php', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'confirm_delivered', orderId: id, email: sessionEmail })
+    });
+    const out = await res.json();
+    if (!out.success) throw new Error(out.message || 'Update failed');
+    Swal.fire({icon:'success', title:'Marked delivered', timer:1200, showConfirmButton:false});
+    loadOrders();
+  } catch (err) {
+    Swal.fire({icon:'error', title:'Error', text: err.message});
+  }
+}
+
+loadOrders();
+</script>
+</body>
+</html>
