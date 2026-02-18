@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Stock Items</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="inventory.css">
+</head>
+<body>
+    <section id="inventory" class="admin-section">
+        <div class="section-header">
+            <h2>Low Stock Items</h2>
+        </div>
+        <div class="inventory-filters">
+            <div class="filter-group">
+                <label for="category-filter">Category:</label>
+                <select name="category" id="category-filter">
+                    <option value="all">All Categories</option>
+                    <option value="meat">Meat</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="beverages">Beverages</option>
+                    <option value="dry-goods">Dry Goods</option>
+                </select>
+            </div>
+            <div class="search-bar-container">
+                <input type="text" id="search-bar" placeholder="Search item name...">
+            </div>
+        </div>
+        <div class="inventory-table" id="inventoryTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Current Stock</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="inventory-actions" style="justify-content:flex-start; gap:12px; margin-top:12px;">
+            <button class="btn btn-primary" id="order-low-stock">Order Low Stock Items</button>
+        </div>
+        <div class="inventory-actions" style="justify-content:flex-end; gap:12px; margin-top:16px;">
+            <a href="admin_inventory.php"><button class="btn btn-secondary">Back to Inventory</button></a>
+            <a href="admin_dashboard.php"><button class="btn btn-back">Dashboard</button></a>
+        </div>
+    </section>
+    <script>
+        function loadLowStock() {
+            const category = document.getElementById('category-filter').value;
+            const search = document.getElementById('search-bar').value;
+            const data = `checkstock=${encodeURIComponent('low-stock')}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
+
+            fetch('inventory.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data
+            })
+            .then(res => res.text())
+            .then(html => {
+                document.querySelector('#inventoryTable tbody').innerHTML = html;
+            })
+            .catch(() => {
+                document.querySelector('#inventoryTable tbody').innerHTML = '<tr><td colspan="6">Failed to load data</td></tr>';
+            });
+        }
+
+        window.onload = loadLowStock;
+        document.getElementById('category-filter').onchange = loadLowStock;
+        document.getElementById('search-bar').oninput = loadLowStock;
+
+        document.getElementById('order-low-stock').addEventListener('click', () => {
+            const rows = Array.from(document.querySelectorAll('#inventoryTable tbody tr'));
+            const items = rows.map(row => {
+                const cells = row.querySelectorAll('td');
+                return {
+                    id: cells[0]?.textContent.trim() || '',
+                    name: cells[1]?.textContent.trim() || '',
+                    cat: cells[2]?.textContent.trim() || '',
+                    qty: cells[3]?.textContent.trim() || '',
+                    unit: cells[4]?.textContent.trim() || ''
+                };
+            }).filter(item => item.id !== '');
+
+            if (!items.length) {
+                alert('No items to order.');
+                return;
+            }
+
+            sessionStorage.setItem('prefillOrderItems', JSON.stringify(items));
+            window.location.href = 'admin_order.php';
+        });
+    </script>
+</body>
+</html>
