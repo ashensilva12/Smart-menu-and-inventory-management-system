@@ -1,93 +1,127 @@
 <?php
 require_once __DIR__ . '/session_check.php';
-  $itemID = trim($_POST['itemID'] ?? '');
-  $itemname = trim($_POST['itemname'] ?? '');
-  $category = trim($_POST['category'] ?? '');
-  $stock = $_POST['stock'] ?? '';
 
-  $valid = $itemID !== '' && $itemname !== '' && $category !== '' && $stock !== '' && is_numeric($stock);
+$itemIDs   = $_POST['itemID'] ?? [];
+$itemNames = $_POST['itemname'] ?? [];
+$categories = $_POST['category'] ?? [];
+$stocks    = $_POST['stock'] ?? [];
 
-  if (!$valid) exit();
+if (!is_array($itemIDs)) $itemIDs = [$itemIDs];
+if (!is_array($itemNames)) $itemNames = [$itemNames];
+if (!is_array($categories)) $categories = [$categories];
+if (!is_array($stocks)) $stocks = [$stocks];
 
-  $stock = (float)$stock;
+$items = [];
+for ($i = 0; $i < count($itemIDs); $i++) {
+    $id = trim($itemIDs[$i] ?? '');
+    $name = trim($itemNames[$i] ?? '');
+    $cat = trim($categories[$i] ?? '');
+    $qty = trim($stocks[$i] ?? '');
 
-  // Default XAMPP MySQL uses root with no password; adjust if yours differs
-  $con = new mysqli('localhost', 'root', '', 'resturent');
+    if ($id === '' && $name === '' && $cat === '' && $qty === '') {
+        continue; // skip blank rows
+    }
 
-  $stmt = $con->prepare("SELECT currentStock FROM invitems WHERE itemID = ? AND category = ? LIMIT 1");
-  $stmt->bind_param('ss', $itemID, $category);
-  $stmt->execute();
-  $result = $stmt->get_result();
+    if ($id === '' || $cat === '' || $qty === '' || !is_numeric($qty) || $qty <= 0) {
+        echo json_encode(['success' => false, 'message' => 'Invalid item data.']);
+        exit;
+    }
 
-  echo '<!DOCTYPE html>
+    $items[] = [
+        'id' => $id,
+        'name' => $name,
+        'cat' => $cat,
+        'qty' => (float)$qty
+    ];
+}
+
+if (empty($items)) {
+    echo json_encode(['success' => false, 'message' => 'No items provided.']);
+    exit;
+}
+
+// Default XAMPP MySQL uses root with no password; adjust if yours differs
+$con = new mysqli('localhost', 'root', '', 'resturent');
+if ($con->connect_error) {
+    echo json_encode(['success' => false, 'message' => 'DB connection failed']);
+    exit;
+}
+$con->set_charset('utf8mb4');
+$con->begin_transaction();
+
+$error = null;
+foreach ($items as $item) {
+    $stmt = $con->prepare("SELECT currentStock FROM invitems WHERE itemID = ? AND category = ? LIMIT 1");
+    $stmt->bind_param('ss', $item['id'], $item['cat']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (!$result || $result->num_rows !== 1) {
+        $error = "Item not found: {$item['id']} ({$item['cat']}).";
+        $stmt->close();
+        break;
+    }
+
+    $row = $result->fetch_assoc();
+    $currentStock = (float)$row['currentStock'];
+    if ($item['qty'] > $currentStock) {
+        $error = "Not enough stock for {$item['id']} (have {$currentStock}, need {$item['qty']}).";
+        $stmt->close();
+        break;
+    }
+
+    $newStock = $currentStock - $item['qty'];
+    $update = $con->prepare("UPDATE invitems SET currentStock = ? WHERE category = ? AND itemID = ?");
+    $update->bind_param('dss', $newStock, $item['cat'], $item['id']);
+    if (!$update->execute()) {
+        $error = 'Update failed. Please try again.';
+        $update->close();
+        $stmt->close();
+        break;
+    }
+    $update->close();
+    $stmt->close();
+}
+
+echo '<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Inventory Update</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 <body>';
-    if ($result && $result->num_rows == 1) {
-    $row = $result->fetch_assoc(); 
-    $currentStock = (float)$row['currentStock'];
-      if ($stock > $currentStock) {
-        echo "
-        <script>
-          Swal.fire({
-            icon: 'warning',
-            title: 'Not Enough Stock',
-            text: 'Item not enough to get. Please add this item first',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            window.location.href = 'admin_updateitem.php';
-          });
-        </script>";
-        } else {
-        $newStock = $currentStock - $stock;
-        $check = $con->prepare("UPDATE invitems SET currentStock = ? WHERE category = ? AND itemID = ?");
-        $check->bind_param('dss', $newStock, $category, $itemID);
-        if ($check->execute()) {
-            echo "
-            <script>
-              Swal.fire({
-                icon: 'success',
-                title: 'Item Updated',
-                text: 'Stock updated successfully.',
-                confirmButtonText: 'OK'
-              }).then(() => {
-                window.location.href = 'admin_inventory.php';
-              });
-            </script>";
-        }else {
-            echo "
-            <script>
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Something went wrong, please try again.',
-                confirmButtonText: 'Retry'
-              }).then(() => {
-                window.location.href = 'admin_updateitem.php';
-              });
-            </script>";
-        }
-        $check->close();
-    }
-}  else {
+
+if ($error === null) {
+    $con->commit();
+    echo "
+    <script>
+      Swal.fire({
+        icon: 'success',
+        title: 'Items Updated',
+        text: 'Stock updated successfully.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'admin_inventory.php';
+      });
+    </script>";
+} else {
+    $con->rollback();
+    $safeMsg = htmlspecialchars($error, ENT_QUOTES);
     echo "
     <script>
       Swal.fire({
         icon: 'error',
-        title: 'Item Not Found',
-        text: 'Can’t find this item. Please add it first.',
-        confirmButtonText: 'Add Item'
+        title: 'Update Failed',
+        text: '{$safeMsg}',
+        confirmButtonText: 'Back'
       }).then(() => {
-        window.location.href = 'admin_additem.php';
+        window.location.href = 'admin_updateitem.php';
       });
     </script>";
 }
-  $stmt->close();
+
 echo "</body></html>";
 $con->close();
 ?>
