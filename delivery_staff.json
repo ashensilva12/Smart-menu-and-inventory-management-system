@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "name": "Demo Driver",
+        "phone": "0700000000",
+        "username": "driver1",
+        "status": "active",
+        "passwordHash": "$2y$10$IAa1hmmwUlRVlk6EM\/gmsusL8gkeyuW61BFAkjkfUbxKPj28jSNV6",
+        "createdAt": "2026-02-04T12:33:10+01:00"
+    },
+    {
+        "id": 2,
+        "name": "ashen",
+        "phone": "0771145778",
+        "username": "deliver@12",
+        "status": "active",
+        "passwordHash": "$2y$10$I9HvQolf1OiIaOS\/.UlrMO6YPekku89dt8ra5AmF4Kl9MF2acLBwC",
+        "createdAt": "2026-02-04T12:40:29+01:00"
+    },
+    {
+        "id": 3,
+        "name": "yasiru",
+        "phone": "0771234325",
+        "username": "yasiru@12",
+        "status": "active",
+        "passwordHash": "$2y$10$ECEhQ3CcFXM8bfHzdFxDruqytyBHHyZ\/NeTZFUcDz51dSQVtayxxu",
+        "createdAt": "2026-02-16T10:20:48+01:00"
+    }
+]
