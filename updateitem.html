@@ -8,6 +8,21 @@
     <!-- Your existing CSS -->
   <link rel="stylesheet" href="additem.css" />
 
+  <style>
+    .two-col { display:flex; gap:28px; align-items:flex-start; padding:20px; flex-wrap:nowrap; }
+    .pane { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:18px; box-shadow:0 10px 28px rgba(0,0,0,0.05); }
+    .stock-pane { flex:0 0 340px; max-width:380px; }
+    .form-pane { flex:1 1 auto; min-width:520px; }
+    .pane h3 { margin:0 0 12px; color:#111827; font-size:18px; }
+    .pane table { width:100%; border-collapse:collapse; }
+    .pane thead th { text-align:left; padding:10px 10px; background:#e5e7eb; color:#1f2937; font-size:12px; letter-spacing:0.01em; }
+    .pane tbody td { padding:9px 10px; border-bottom:1px solid #e5e7eb; font-size:13px; color:#111827; }
+    .pane tbody tr:nth-child(odd) { background:#f7f7f9; }
+    .pane .right { text-align:right; }
+    .modal { box-shadow:0 12px 32px rgba(0,0,0,0.06); }
+    /* Desktop-only layout: no mobile adjustments needed */
+  </style>
+
   <!-- SweetAlert2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
 
@@ -22,46 +37,77 @@
       <a href="admin_inventory.php">Inventory</a>
     </nav>
   </header>
-  <div class="modal" id="add-inventory-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Get Inventory Item</h3>
-        <a href="admin_inventory.php">
-          <button class="close-modal">&times;</button>
-        </a>
+  <div class="two-col">
+    <div class="pane stock-pane">
+      <h3>Current Stock</h3>
+      <div class="inventory-table" style="max-height:520px; overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th class="right">Stock</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-list">
+            <tr><td colspan="4" style="padding:10px; text-align:center;">Loading…</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="modal-body">
-        <form action="updateitem.php" method="POST">
-          <div class="form-group">
-            <label for="item-ID">Item ID</label>
-            <input type="text" name="itemID" id="item-ID" required />
-          </div>
-          <div class="form-group">
-            <label for="item-name">Item Name</label>
-            <input type="text" name="itemname" id="item-name" required />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="item-category">Category</label>
-              <select name="category" id="item-category" required>
-                <option value="">Select Category</option>
-                <option value="meat">Meat</option>
-                <option value="vegetables">Vegetables</option>
-                <option value="dairy">Dairy</option>
-                <option value="beverages">Beverages</option>
-                <option value="dry-goods">Dry Foods</option>
-              </select>
+    </div>
+
+    <div class="modal form-pane" id="add-inventory-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Get Inventory Item</h3>
+          <a href="admin_inventory.php">
+            <button class="close-modal">&times;</button>
+          </a>
+        </div>
+        <div class="modal-body">
+          <form action="updateitem.php" method="POST" id="update-form">
+          <div id="items-container">
+            <div class="order-item" data-index="0">
+              <div class="form-group">
+                <label>Item ID</label>
+                <input type="text" name="itemID[]" required />
+              </div>
+              <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" name="itemname[]" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select name="category[]" required>
+                    <option value="">Select Category</option>
+                    <option value="meat">Meat</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="beverages">Beverages</option>
+                    <option value="dry-goods">Dry Foods</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Used Stock</label>
+                  <input type="number" name="stock[]" min="0" step="0.01" required />
+                </div>
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <button type="button" class="btn btn-secondary remove-item">Remove</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="current-stock">Used Stock</label>
-              <input type="number" name="stock" id="current-stock" min="0" step="0.01" required />
-            </div>
+          <div class="form-actions" style="justify-content:flex-start; gap:10px;">
+            <button type="button" class="btn btn-secondary" id="add-item">Add Another Item</button>
           </div>
           <div class="form-actions">
             <button type="reset" class="btn btn-secondary close-modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Update Item</button>
+            <button type="submit" class="btn btn-primary">Update Items</button>
           </div>
         </form>
           <a href="admin_inventory.php">
@@ -70,5 +116,126 @@
       </div>
     </div>
   </div>
+  </div>
 </body>
+<script>
+  const esc = (s = '') => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+
+  const itemsContainer = document.getElementById('items-container');
+  const addItemBtn = document.getElementById('add-item');
+  const form = document.getElementById('update-form');
+
+  function setRowValues(wrapper, prefill) {
+    const inputs = wrapper.querySelectorAll('input');
+    const selects = wrapper.querySelectorAll('select');
+    if (!prefill) return;
+    if (inputs[0]) inputs[0].value = prefill.id || '';
+    if (inputs[1]) inputs[1].value = prefill.name || '';
+    if (selects[0]) selects[0].value = (prefill.cat || '').toLowerCase();
+  }
+
+  function addRow(prefill) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'order-item';
+    wrapper.innerHTML = `
+      <div class="form-group">
+        <label>Item ID</label>
+        <input type="text" name="itemID[]" required />
+      </div>
+      <div class="form-group">
+        <label>Item Name</label>
+        <input type="text" name="itemname[]" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select name="category[]" required>
+            <option value="">Select Category</option>
+            <option value="meat">Meat</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="dairy">Dairy</option>
+            <option value="beverages">Beverages</option>
+            <option value="dry-goods">Dry Foods</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Used Stock</label>
+          <input type="number" name="stock[]" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button type="button" class="btn btn-secondary remove-item">Remove</button>
+        </div>
+      </div>
+    `;
+    itemsContainer.appendChild(wrapper);
+    if (prefill) {
+      setRowValues(wrapper, prefill);
+    }
+    return wrapper;
+  }
+
+  itemsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-item')) {
+      const row = e.target.closest('.order-item');
+      if (itemsContainer.children.length === 1) return;
+      row.remove();
+    }
+  });
+
+  addItemBtn.addEventListener('click', addRow);
+
+  form.addEventListener('submit', (e) => {
+    if (!form.reportValidity()) {
+      e.preventDefault();
+      return;
+    }
+  });
+
+  // Load full inventory list for quick reference
+  fetch('inventory.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'checkstock=all&category=all&search='
+  })
+  .then(res => res.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<table><tbody>' + html + '</tbody></table>', 'text/html');
+    const rows = Array.from(doc.querySelectorAll('tbody tr'));
+    const trimmed = rows.map(r => {
+      const cells = r.querySelectorAll('td');
+      if (cells.length < 5) return null;
+      const id = esc(cells[0].textContent.trim());
+      const name = esc(cells[1].textContent.trim());
+      const cat = esc(cells[2].textContent.trim());
+      const stock = esc(cells[3].textContent.trim());
+      const unit = esc(cells[4].textContent.trim());
+      return `<tr data-id="${id}" data-name="${name}" data-cat="${cat}" data-unit="${unit}" data-stock="${stock}"><td>${id}</td><td>${name}</td><td class=\"right\">${stock}</td><td>${unit}</td></tr>`;
+    }).filter(Boolean).join('');
+    document.getElementById('inventory-list').innerHTML = trimmed || '<tr><td colspan="4" style="padding:10px; text-align:center;">No items found</td></tr>';
+  })
+  .catch(() => {
+    document.getElementById('inventory-list').innerHTML = '<tr><td colspan="4" style="padding:10px; text-align:center;">Failed to load items</td></tr>';
+  });
+
+  // Click-to-prefill from stock list
+  document.getElementById('inventory-list').addEventListener('click', (e) => {
+    const row = e.target.closest('tr');
+    if (!row || !row.dataset.id) return;
+    const prefill = {
+      id: row.dataset.id,
+      name: row.dataset.name,
+      cat: row.dataset.cat
+    };
+    const emptyRow = Array.from(itemsContainer.querySelectorAll('.order-item')).find(r => {
+      const idInput = r.querySelector('input[name="itemID[]"]');
+      return idInput && !idInput.value.trim();
+    });
+    const target = emptyRow || addRow(prefill);
+    setRowValues(target, prefill);
+  });
+</script>
 </html>
